@@ -1,0 +1,64 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+@theme {
+  --color-gold: #c9a84c;
+  --color-gold-light: #e8c96a;
+  --color-void-950: #04060f;
+  --color-void-900: #080c18;
+  --color-void-800: #0f1629;
+  --color-void-600: #1e2d4d;
+  --color-parchment: #e8e4d9;
+  --color-parchment-dim: #b8b4aa;
+  --font-cinzel: "Cinzel", serif;
+  --font-nunito: "Nunito", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #080c18;
+  color: #e8e4d9;
+  font-family: "Nunito", sans-serif;
+  min-height: 100vh;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+@layer components {
+  .input-field {
+    @apply w-full bg-void-900 border border-void-600 rounded-lg px-4 py-2.5 text-parchment text-sm focus:outline-none focus:border-gold/60 transition-colors;
+  }
+
+  .btn-gold {
+    @apply w-full bg-gold text-void-900 font-cinzel font-bold text-sm tracking-widest uppercase py-2.5 rounded-lg hover:bg-gold-light transition-colors disabled:opacity-50 cursor-pointer;
+  }
+
+  .btn-outline {
+    @apply w-full border border-gold/40 text-gold font-cinzel text-sm tracking-widest uppercase py-2.5 rounded-lg hover:border-gold hover:bg-gold/10 transition-all cursor-pointer;
+  }
+
+  .card {
+    @apply bg-void-800 border border-void-600 rounded-xl;
+  }
+
+  .form-label {
+    @apply font-cinzel text-xs tracking-widest uppercase text-parchment-dim;
+  }
+
+  .page-title {
+    @apply font-cinzel text-2xl font-bold text-gold;
+  }
+}
+
+::-webkit-scrollbar-track {
+  background: #04060f;
+}
+::-webkit-scrollbar-thumb {
+  background: #c9a84c;
+  border-radius: 3px;
+}
