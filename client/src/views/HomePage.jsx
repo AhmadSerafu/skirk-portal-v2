@@ -9,11 +9,11 @@ export default function HomePage() {
       {/* Hero section */}
       <div className="relative flex-1 flex items-center min-h-screen overflow-hidden">
         {/* Background glow */}
-        <div className="absolute inset-0 bg-gradient-to-r from-void-950 via-void-900 to-void-950" />
-        <div className="absolute right-0 top-0 w-2/3 h-full opacity-20 bg-gradient-to-l from-blue-900 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-r from-void-950 via-void-900 to-void-950" />
+        <div className="absolute right-0 top-0 w-2/3 h-full opacity-20 bg-linear-to-l from-blue-900 to-transparent" />
 
         {/* Skirk image */}
-        <div className="absolute left-[25%] right-0 top-0 bottom-0 flex items-center pt-16 overflow-hidden hidden md:flex">
+        <div className="absolute left-[25%] right-0 top-0 bottom-0 items-center pt-16 overflow-hidden hidden md:flex">
           <img src={skirkImg} alt="Skirk" className="w-full object-contain" />
         </div>
 

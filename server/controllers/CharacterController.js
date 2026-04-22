@@ -54,7 +54,11 @@ class CharacterController {
 
       res.status(200).json(data);
     } catch (error) {
-      next(error);
+      if (error.response?.status === 404) {
+        next({ name: "NotFound", message: "Character not found" });
+      } else {
+        next(error);
+      }
     }
   }
 }

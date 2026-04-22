@@ -240,7 +240,7 @@ export default function AIAnalyzerPage() {
                 <span className="loading loading-spinner text-gold w-10 h-10"></span>
               </div>
             ) : (
-              <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-2 max-h-[390px] overflow-y-auto pr-1">
+              <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-2 max-h-97.5 overflow-y-auto pr-1">
                 {characters
                   .filter((char) =>
                     char.name.toLowerCase().includes(search.toLowerCase()),

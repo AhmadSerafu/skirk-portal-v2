@@ -43,27 +43,25 @@ class BuildController {
       const { id } = req.traveler;
       const { name, description, characters } = req.body;
 
-      if (characters && characters.length > 4) {
+      if (!characters || characters.length === 0) {
         throw {
           name: "BadRequest",
-          message: "Maximum 4 characters per build",
+          message: "At least 1 character is required",
         };
       }
 
-      const build = await Build.create({
-        name,
-        description,
-        travelerId: id,
-      });
-
-      if (characters && characters.length > 0) {
-        const buildCharacters = characters.map((characterId, index) => ({
-          buildId: build.id,
-          characterId,
-          slot: index + 1,
-        }));
-        await BuildCharacter.bulkCreate(buildCharacters);
+      if (characters.length > 4) {
+        throw { name: "BadRequest", message: "Maximum 4 characters per build" };
       }
+
+      const build = await Build.create({ name, description, travelerId: id });
+
+      const buildCharacters = characters.map((characterId, index) => ({
+        buildId: build.id,
+        characterId,
+        slot: index + 1,
+      }));
+      await BuildCharacter.bulkCreate(buildCharacters);
 
       const result = await Build.findByPk(build.id, {
         include: [{ model: BuildCharacter }],
@@ -80,26 +78,28 @@ class BuildController {
       const { id } = req.params;
       const { name, description, characters } = req.body;
 
-      const build = await Build.findByPk(id);
-
-      if (characters && characters.length > 4) {
+      if (!characters || characters.length === 0) {
         throw {
           name: "BadRequest",
-          message: "Maximum 4 characters per build",
+          message: "At least 1 character is required",
         };
       }
 
+      if (characters.length > 4) {
+        throw { name: "BadRequest", message: "Maximum 4 characters per build" };
+      }
+
+      const build = await Build.findByPk(id);
+
       await build.update({ name, description });
 
-      if (characters) {
-        await BuildCharacter.destroy({ where: { buildId: id } });
-        const buildCharacters = characters.map((characterId, index) => ({
-          buildId: id,
-          characterId,
-          slot: index + 1,
-        }));
-        await BuildCharacter.bulkCreate(buildCharacters);
-      }
+      await BuildCharacter.destroy({ where: { buildId: id } });
+      const buildCharacters = characters.map((characterId, index) => ({
+        buildId: id,
+        characterId,
+        slot: index + 1,
+      }));
+      await BuildCharacter.bulkCreate(buildCharacters);
 
       const result = await Build.findByPk(id, {
         include: [{ model: BuildCharacter }],

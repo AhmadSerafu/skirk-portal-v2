@@ -100,7 +100,7 @@ export default function BuildFormPage({
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                 />
-                <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-2 max-h-[560px] overflow-y-auto pr-1">
+                <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-2 max-h-140 overflow-y-auto pr-1">
                   {characters
                     .filter((char) =>
                       char.name.toLowerCase().includes(search.toLowerCase()),

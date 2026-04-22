@@ -20,10 +20,15 @@ export default function CharacterCard({ character }) {
             alt={character.name}
             className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-void-950 via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-linear-to-t from-void-950 via-transparent to-transparent" />
         </div>
-        <p className="font-cinzel text-sm font-semibold text-parchment text-center leading-snug min-h-[2.5rem]">
+        <p className="font-cinzel text-sm font-semibold text-parchment text-center leading-snug line-clamp-1">
           {character.name}
+        </p>
+        <p
+          className={`text-sm tracking-widest ${character.rarity === 5 ? "text-gold" : "text-purple-400"}`}
+        >
+          {"★".repeat(character.rarity)}
         </p>
         <span
           className={`text-xs px-2 py-0.5 rounded-full border ${ELEMENT_COLORS[character.vision] || "bg-void-600 text-parchment-dim border-void-600"}`}
