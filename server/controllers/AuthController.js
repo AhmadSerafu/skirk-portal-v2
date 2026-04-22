@@ -1,6 +1,7 @@
 const { Traveler } = require("../models");
 const { comparePassword } = require("../helpers/bcrypt");
 const { signToken } = require("../helpers/jwt");
+const { OAuth2Client } = require("google-auth-library");
 
 class AuthController {
   static async register(req, res, next) {
@@ -44,6 +45,44 @@ class AuthController {
       const token = signToken(payload);
 
       res.status(200).json({ access_token: token });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async googleLogin(req, res, next) {
+    try {
+      const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+      const { access_token_google } = req.headers;
+
+      if (!access_token_google)
+        throw { name: "BadRequest", message: "Invalid Token" };
+
+      const ticket = await client.verifyIdToken({
+        idToken: access_token_google,
+        audience: process.env.GOOGLE_CLIENT_ID,
+      });
+
+      const payload = ticket.getPayload();
+
+      if (!payload.email_verified) {
+        throw { name: "BadRequest", message: "Email is not verified" };
+      }
+
+      const [traveler] = await Traveler.findOrCreate({
+        where: { email: payload.email },
+        defaults: {
+          password: Date.now().toString() + Math.random().toString(),
+        },
+      });
+
+      const access_token = signToken({
+        id: traveler.id,
+        email: traveler.email,
+      });
+
+      res.status(200).json({ access_token });
     } catch (error) {
       next(error);
     }

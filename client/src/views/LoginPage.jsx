@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { url } from "../constants/url";
+import { useGoogleLogin, GoogleLogin } from "@react-oauth/google";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -23,9 +24,31 @@ export default function LoginPage() {
       navigate("/characters");
     } catch (error) {
       toast.error(error.response?.data?.message || "Login failed");
-      // console.log(error);
     }
   };
+
+  const handleGoogleLogin = async (credentialResponse) => {
+    try {
+      console.log(credentialResponse);
+
+      const { data } = await axios.post(
+        `${url}/auth/google-login`,
+        {},
+        { headers: { access_token_google: credentialResponse.credential } },
+      );
+
+      localStorage.setItem("access_token", data.access_token);
+      toast.success("Login Success!");
+      navigate("/builds");
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Login failed");
+    }
+  };
+
+  // const googleLogin = useGoogleLogin({
+  //   flow: "implicit",
+  //   onSuccess: handleGoogleLogin,
+  // });
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
@@ -52,7 +75,6 @@ export default function LoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
-
             <div className="flex flex-col gap-1.5">
               <label className="form-label">Password</label>
               <input
@@ -62,8 +84,28 @@ export default function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-
             <button className="btn-gold mt-2">Login</button>
+            <div className="flex items-center gap-3 my-1">
+              <div className="flex-1 h-px bg-void-600" />
+              <span className="text-parchment-dim text-xs font-nunito">or</span>
+              <div className="flex-1 h-px bg-void-600" />
+            </div>
+
+            <div className="flex justify-center">
+              <GoogleLogin theme="filled_black" onSuccess={handleGoogleLogin} />
+            </div>
+            {/* <button
+              type="button"
+              onClick={() => googleLogin()}
+              className="btn-outline w-full flex items-center justify-center gap-2"
+            >
+              <img
+                src="https://www.google.com/favicon.ico"
+                alt="Google"
+                className="w-4 h-4"
+              />
+              Sign in with Google
+            </button> */}
           </form>
 
           <p className="text-center text-parchment-dim text-xs mt-6">

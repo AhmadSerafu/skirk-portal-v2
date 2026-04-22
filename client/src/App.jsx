@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router";
+import { Navigate, Routes, Route } from "react-router";
 import { ToastContainer } from "react-toastify";
 import Navbar from "./components/Navbar";
 import LoginPage from "./views/LoginPage";
@@ -13,7 +13,7 @@ function App() {
       <Navbar />
       <ToastContainer theme="dark" position="top-right" />
       <Routes>
-        <Route path="/" element={<h1>Home</h1>} />
+        <Route path="/" element={<Navigate to="/characters" replace />} />
         <Route path="/characters" element={<CharactersPage />} />
         <Route path="/characters/:id" element={<CharacterDetailPage />} />
         <Route path="/login" element={<LoginPage />} />

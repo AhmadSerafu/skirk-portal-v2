@@ -16,6 +16,8 @@ export default function CharacterDetailPage() {
     try {
       setLoading(true);
       const { data } = await axios.get(`${url}/characters/${id}`);
+      console.log(data);
+
       setCharacter(data);
     } catch (error) {
       console.log(error);
@@ -189,8 +191,12 @@ export default function CharacterDetailPage() {
 
       {activeTab === "constellations" && (
         <div className="flex flex-col gap-3">
-          {character.constellations?.map((con, index) => (
-            <ConstellationCard key={index} constellation={con} index={index} />
+          {character.constellations?.map((constellation, index) => (
+            <ConstellationCard
+              key={index}
+              constellation={constellation}
+              index={index}
+            />
           ))}
         </div>
       )}
