@@ -1,28 +1,35 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { url } from "../constants/url";
 import { Link } from "react-router";
 import CharacterCard from "../components/CharacterCard";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCharacters } from "../features/characters/charactersSlice";
+import { GiSwitchWeapon } from "react-icons/gi";
+import { GiFireball } from "react-icons/gi";
 
 export default function CharactersPage() {
-  const [characters, setCharacters] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const { data: characters, loading } = useSelector(
+    (state) => state.characters,
+  );
+  const dispatch = useDispatch();
 
-  const fetchCharacters = async () => {
-    try {
-      setLoading(true);
-      const { data } = await axios.get(`${url}/characters`);
-      setCharacters(data);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const [filterVision, setFilterVision] = useState("");
+  const [filterWeapon, setFilterWeapon] = useState("");
+
+  const visions = [
+    "Pyro",
+    "Hydro",
+    "Cryo",
+    "Electro",
+    "Anemo",
+    "Geo",
+    "Dendro",
+  ];
+  const weapons = ["Sword", "Claymore", "Polearm", "Bow", "Catalyst"];
 
   useEffect(() => {
-    fetchCharacters();
-  }, []);
+    dispatch(fetchCharacters({ vision: filterVision, weapon: filterWeapon }));
+  }, [filterVision, filterWeapon]);
 
   if (loading)
     return (
@@ -32,10 +39,80 @@ export default function CharactersPage() {
     );
 
   return (
-    <div className="pt-24 px-6 max-w-6xl mx-auto">
-      <h1 className="page-title mb-8">Characters</h1>
+    <div className="pt-24 px-6 pb-12 max-w-6xl mx-auto overflow-hidden">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
+        <h1 className="page-title">Characters</h1>
+        <div className="flex gap-3">
+          {/* Element dropdown */}
+          <div className="dropdown dropdown-end">
+            <div
+              tabIndex={0}
+              role="button"
+              className="btn-outline px-3 py-1.5 w-fit flex items-center gap-2"
+            >
+              <GiFireball className="text-gold text-lg" />
+              <span className="font-cinzel text-xs tracking-widest uppercase">
+                {filterVision || "Element"}
+              </span>
+            </div>
+            <ul
+              tabIndex={0}
+              className="dropdown-content z-10 mt-1 bg-void-800 border border-void-600 rounded-lg overflow-hidden w-36"
+            >
+              <li
+                onClick={() => setFilterVision("")}
+                className="font-nunito text-sm text-parchment-dim px-4 py-2 hover:bg-void-600 cursor-pointer"
+              >
+                All Elements
+              </li>
+              {visions.map((vision, index) => (
+                <li
+                  key={index}
+                  onClick={() => setFilterVision(vision)}
+                  className="font-nunito text-sm text-parchment px-4 py-2 hover:bg-void-600 cursor-pointer"
+                >
+                  {vision}
+                </li>
+              ))}
+            </ul>
+          </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+          {/* Weapon dropdown */}
+          <div className="dropdown dropdown-end">
+            <div
+              tabIndex={0}
+              role="button"
+              className="btn-outline px-3 py-1.5 w-fit flex items-center gap-2"
+            >
+              <GiSwitchWeapon className="text-gold text-lg" />
+              <span className="font-cinzel text-xs tracking-widest uppercase">
+                {filterWeapon || "Weapon"}
+              </span>
+            </div>
+            <ul
+              tabIndex={0}
+              className="dropdown-content z-10 mt-1 bg-void-800 border border-void-600 rounded-lg overflow-hidden w-36"
+            >
+              <li
+                onClick={() => setFilterWeapon("")}
+                className="font-nunito text-sm text-parchment-dim px-4 py-2 hover:bg-void-600 cursor-pointer"
+              >
+                All Weapons
+              </li>
+              {weapons.map((weapon, index) => (
+                <li
+                  key={index}
+                  onClick={() => setFilterWeapon(weapon)}
+                  className="font-nunito text-sm text-parchment px-4 py-2 hover:bg-void-600 cursor-pointer"
+                >
+                  {weapon}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
         {characters.map((character, index) => (
           <CharacterCard key={index} character={character} />
         ))}

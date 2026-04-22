@@ -2,44 +2,25 @@ import { useEffect, useState } from "react";
 import { url } from "../constants/url";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCharacters } from "../features/characters/charactersSlice";
+import { fetchBuilds } from "../features/builds/buildsSlice";
 
 export default function AIAnalyzerPage() {
-  const [builds, setBuilds] = useState([]);
-  const [characters, setCharacters] = useState([]);
-  const [loadingCharacters, setLoadingCharacters] = useState(false);
-  const [loadingBuilds, setLoadingBuilds] = useState(false);
+  const { data: characters, loading: loadingCharacters } = useSelector(
+    (state) => state.characters,
+  );
+
+  const { data: builds, loading: loadingBuilds } = useSelector(
+    (state) => state.builds,
+  );
+
+  const dispatch = useDispatch();
+
   const [selectedCharacter, setSelectedCharacter] = useState([]);
   const [analyzing, setAnalyzing] = useState(false);
   const [result, setResult] = useState(null);
   const [search, setSearch] = useState("");
-
-  const fetchCharacters = async () => {
-    try {
-      setLoadingCharacters(true);
-      const { data } = await axios.get(`${url}/characters`);
-      setCharacters(data);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoadingCharacters(false);
-    }
-  };
-
-  const fetchBuilds = async () => {
-    try {
-      setLoadingBuilds(true);
-      const { data } = await axios.get(`${url}/builds`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-        },
-      });
-      setBuilds(data);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoadingBuilds(false);
-    }
-  };
 
   const toggleCharacter = (characterId) => {
     if (selectedCharacter.includes(characterId)) {
@@ -104,8 +85,8 @@ export default function AIAnalyzerPage() {
   };
 
   useEffect(() => {
-    fetchCharacters();
-    fetchBuilds();
+    dispatch(fetchCharacters());
+    dispatch(fetchBuilds());
   }, []);
 
   return (

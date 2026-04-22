@@ -14,7 +14,7 @@ export default function CharacterCard({ character }) {
   return (
     <Link to={`/characters/${character.id}`}>
       <div className="card p-2 flex flex-col items-center gap-1.5 cursor-pointer group hover:-translate-y-1 transition-transform duration-300">
-        <div className="relative w-full h-64 overflow-hidden rounded-lg bg-void-800">
+        <div className="relative w-full h-40 sm:h-64 overflow-hidden rounded-lg bg-void-800">
           <img
             src={`https://genshin.jmp.blue/characters/${character.id}/card`}
             alt={character.name}

@@ -5,11 +5,17 @@ import { url } from "../constants/url";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import BuildFormPage from "../components/BuildFormPage";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCharacters } from "../features/characters/charactersSlice";
 
 export default function EditBuildPage() {
   const { id } = useParams();
-  const [characters, setCharacters] = useState([]);
-  const [loading, setLoading] = useState(true);
+
+  const { data: characters, loading } = useSelector(
+    (state) => state.characters,
+  );
+  const dispatch = useDispatch();
+
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [selectedCharacter, setSelectedCharacter] = useState([]);
@@ -31,18 +37,6 @@ export default function EditBuildPage() {
       );
     } catch (error) {
       console.log(error);
-    }
-  };
-
-  const fetchCharacters = async () => {
-    try {
-      setLoading(true);
-      const { data } = await axios.get(`${url}/characters`);
-      setCharacters(data);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -85,7 +79,7 @@ export default function EditBuildPage() {
 
   useEffect(() => {
     fetchBuild();
-    fetchCharacters();
+    dispatch(fetchCharacters());
   }, [id]);
 
   return (

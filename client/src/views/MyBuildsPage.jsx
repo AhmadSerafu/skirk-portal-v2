@@ -1,31 +1,33 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { url } from "../constants/url";
+import { useEffect } from "react";
 import { Link } from "react-router";
 import BuildCard from "../components/BuildCard";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchBuilds } from "../features/builds/buildsSlice";
+import { toast } from "react-toastify";
+import axios from "axios";
+import { url } from "../constants/url";
 
 export default function MyBuildsPage() {
-  const [builds, setBuilds] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { data: builds, loading } = useSelector((state) => state.builds);
+  const dispatch = useDispatch();
 
-  const fetchBuilds = async () => {
+  const handleDelete = async (id) => {
     try {
-      const { data } = await axios.get(`${url}/builds`, {
+      await axios.delete(`${url}/builds/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
       });
 
-      setBuilds(data);
+      toast.success("Build Deleted!");
+      dispatch(fetchBuilds());
     } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
+      toast.error("Failed to delete build!");
     }
   };
 
   useEffect(() => {
-    fetchBuilds();
+    dispatch(fetchBuilds());
   }, []);
 
   if (loading)
@@ -57,7 +59,11 @@ export default function MyBuildsPage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {builds.map((build, index) => (
-              <BuildCard build={build} key={index} />
+              <BuildCard
+                build={build}
+                key={index}
+                handleDelete={handleDelete}
+              />
             ))}
           </div>
         )}

@@ -4,27 +4,20 @@ import axios from "axios";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import BuildFormPage from "../components/BuildFormPage";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCharacters } from "../features/characters/charactersSlice";
 
 export default function AddBuildPage() {
-  const [characters, setCharacters] = useState([]);
+  const { data: characters, loading } = useSelector(
+    (state) => state.characters,
+  );
+  const dispatch = useDispatch();
+
   const [selectedCharacter, setSelectedCharacter] = useState([]);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
-
-  const fetchCharacters = async () => {
-    try {
-      setLoading(true);
-      const { data } = await axios.get(`${url}/characters`);
-      setCharacters(data);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const toggleCharacter = (characterId) => {
     if (selectedCharacter.includes(characterId)) {
@@ -64,7 +57,7 @@ export default function AddBuildPage() {
   };
 
   useEffect(() => {
-    fetchCharacters();
+    dispatch(fetchCharacters());
   }, []);
 
   return (

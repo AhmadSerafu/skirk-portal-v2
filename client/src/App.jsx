@@ -11,6 +11,8 @@ import BuildFormPage from "./components/BuildFormPage";
 import AddBuildPage from "./views/AddBuildPage";
 import EditBuildPage from "./views/EditBuildPage";
 import AIAnalyzerPage from "./views/AIAnalyzerPage";
+import GuestRoute from "./layouts/GuestRoute";
+import HomePage from "./views/HomePage";
 
 function App() {
   return (
@@ -18,11 +20,14 @@ function App() {
       <Navbar />
       <ToastContainer theme="dark" position="top-right" />
       <Routes>
-        <Route path="/" element={<Navigate to="/characters" replace />} />
+        <Route path="/" element={<HomePage />} />
         <Route path="/characters" element={<CharactersPage />} />
         <Route path="/characters/:id" element={<CharacterDetailPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
+
+        <Route element={<GuestRoute />}>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+        </Route>
 
         <Route element={<ProtectedRoute />}>
           <Route path="/builds" element={<MyBuildsPage />} />
