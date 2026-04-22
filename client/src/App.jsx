@@ -6,6 +6,11 @@ import RegisterPage from "./views/RegisterPage";
 import CharactersPage from "./views/CharactersPage";
 import CharacterDetailPage from "./views/CharacterDetailPage";
 import ProtectedRoute from "./layouts/ProtectedRoute";
+import MyBuildsPage from "./views/MyBuildsPage";
+import BuildFormPage from "./components/BuildFormPage";
+import AddBuildPage from "./views/AddBuildPage";
+import EditBuildPage from "./views/EditBuildPage";
+import AIAnalyzerPage from "./views/AIAnalyzerPage";
 
 function App() {
   return (
@@ -20,11 +25,10 @@ function App() {
         <Route path="/register" element={<RegisterPage />} />
 
         <Route element={<ProtectedRoute />}>
-          <Route
-            path="/builds"
-            element={<h1>Ini halaman build setelah login</h1>}
-          />
-          <Route path="/ai" element={<h1>Ini halaman ai setelah login</h1>} />
+          <Route path="/builds" element={<MyBuildsPage />} />
+          <Route path="/builds/create" element={<AddBuildPage />} />
+          <Route path="/builds/:id/edit" element={<EditBuildPage />} />
+          <Route path="/ai" element={<AIAnalyzerPage />} />
         </Route>
       </Routes>
     </>

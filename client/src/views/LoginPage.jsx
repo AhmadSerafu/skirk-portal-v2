@@ -21,7 +21,7 @@ export default function LoginPage() {
 
       localStorage.setItem("access_token", data.access_token);
       toast.success("Login Success!");
-      navigate("/characters");
+      navigate("/builds");
     } catch (error) {
       toast.error(error.response?.data?.message || "Login failed");
     }
