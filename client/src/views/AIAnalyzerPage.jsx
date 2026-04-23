@@ -67,19 +67,43 @@ export default function AIAnalyzerPage() {
   };
 
   const REACTION_COLORS = {
+    // Pyro reactions
     Vaporize: "bg-orange-500/20 text-orange-300 border-orange-500/40",
     Melt: "bg-red-500/20 text-red-300 border-red-500/40",
+    Burning: "bg-red-600/20 text-red-400 border-red-600/40",
     Overloaded: "bg-orange-600/20 text-orange-400 border-orange-600/40",
-    Superconduct: "bg-purple-500/20 text-purple-300 border-purple-500/40",
-    "Electro-Charged": "bg-yellow-400/20 text-yellow-300 border-yellow-400/40",
+    Overload: "bg-orange-600/20 text-orange-400 border-orange-600/40",
+
+    // Cryo reactions
+    Frozen: "bg-cyan-400/20 text-cyan-300 border-cyan-400/40",
     Freeze: "bg-cyan-400/20 text-cyan-300 border-cyan-400/40",
     Shatter: "bg-cyan-600/20 text-cyan-400 border-cyan-600/40",
+    Superconduct: "bg-purple-500/20 text-purple-300 border-purple-500/40",
+    "Super Conduct": "bg-purple-500/20 text-purple-300 border-purple-500/40",
+
+    // Electro reactions
+    "Electro-Charged": "bg-yellow-400/20 text-yellow-300 border-yellow-400/40",
+    "Electro Charged": "bg-yellow-400/20 text-yellow-300 border-yellow-400/40",
+
+    // Anemo reactions
     Swirl: "bg-emerald-400/20 text-emerald-300 border-emerald-400/40",
+    "Anemo Swirl": "bg-emerald-400/20 text-emerald-300 border-emerald-400/40",
+    "Cryo Swirl": "bg-cyan-400/20 text-cyan-300 border-cyan-400/40",
+    "Hydro Swirl": "bg-blue-400/20 text-blue-300 border-blue-400/40",
+    "Pyro Swirl": "bg-orange-500/20 text-orange-300 border-orange-500/40",
+    "Electro Swirl": "bg-yellow-400/20 text-yellow-300 border-yellow-400/40",
+
+    // Geo reactions
     Crystallize: "bg-yellow-600/20 text-yellow-400 border-yellow-600/40",
+    "Geo Crystallize": "bg-yellow-600/20 text-yellow-400 border-yellow-600/40",
+
+    // Dendro reactions
     Bloom: "bg-green-500/20 text-green-300 border-green-500/40",
     Hyperbloom: "bg-green-600/20 text-green-400 border-green-600/40",
+    "Hyper Bloom": "bg-green-600/20 text-green-400 border-green-600/40",
     Burgeon: "bg-lime-500/20 text-lime-300 border-lime-500/40",
     Quicken: "bg-lime-400/20 text-lime-300 border-lime-400/40",
+    Catalyze: "bg-lime-400/20 text-lime-300 border-lime-400/40",
     Aggravate: "bg-violet-500/20 text-violet-300 border-violet-500/40",
     Spread: "bg-green-700/20 text-green-400 border-green-700/40",
   };
