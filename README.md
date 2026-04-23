@@ -1,2 +1,204 @@
 [![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-2e0aaae1b6195c2367325f4f02e2d04e9abb55f0b24a779b69b11b9e10269abc.svg)](https://classroom.github.com/online_ide?assignment_repo_id=23643672&assignment_repo_type=AssignmentRepo)
+
 # Individual Project Phase 2
+
+# Skirk Portal
+
+> A full-stack Genshin Impact team builder and analyzer powered by AI.
+
+![Homepage](docs/screenshots/homepage.png)
+
+## 🔗 Links
+
+- **Client**: [skirk.my.id](https://skirk.my.id)
+- **Server**: [api.skirk.my.id](https://api.skirk.my.id)
+
+---
+
+## 📖 About
+
+Skirk Portal is a full-stack web application themed around Genshin Impact. It allows players to explore characters, create and manage team builds, and analyze team synergy using the power of Gemini AI.
+
+---
+
+## ✨ Features
+
+- 🔍 **Character Explorer** — Browse all Genshin Impact characters with filter by element, weapon, nation, and rarity
+- 📋 **Team Builds** — Create, edit, and delete your own team compositions with up to 4 characters
+- 🤖 **AI Analyzer** — Analyze your team synergy using Gemini AI — get team name, rating, elemental reactions, strengths, weaknesses, and playstyle
+- 🔐 **Authentication** — Register, login, and Google OAuth support
+- 📱 **Responsive** — Works on both desktop and mobile
+
+---
+
+## 🛠️ Tech Stack
+
+### Server
+
+- **Runtime**: Node.js
+- **Framework**: Express.js
+- **Database**: PostgreSQL + Sequelize ORM
+- **Auth**: JWT + bcryptjs + Google OAuth
+- **AI**: Gemini (`gemini-3-flash-preview`) via `@google/genai`
+- **3rd Party API**: [genshin.jmp.blue](https://genshin.jmp.blue)
+- **Testing**: Jest + Supertest (coverage 95%+)
+
+### Client
+
+- **Library**: React.js (Vite)
+- **State Management**: Redux Toolkit
+- **Routing**: React Router v7
+- **Styling**: Tailwind CSS v4 + DaisyUI v5
+- **HTTP**: Axios
+- **Auth**: `@react-oauth/google`
+
+---
+
+## 📸 Screenshots
+
+### Homepage
+
+![Homepage](docs/screenshots/homepage.png)
+
+### Login
+
+![Login](docs/screenshots/login.png)
+
+### Character Detail
+
+![Character Detail](docs/screenshots/character-detail.png)
+
+### My Builds
+
+![My Builds](docs/screenshots/my-builds.png)
+
+### Create Build
+
+![Create Build](docs/screenshots/create-build.png)
+
+### Edit Build
+
+![Edit Build](docs/screenshots/edit-build.png)
+
+### AI Analyzer
+
+![AI Analyzer](docs/screenshots/ai-analyzer.png)
+
+### AI Result
+
+![AI Result](docs/screenshots/ai-result.png)
+
+### Mobile View
+
+| Homepage                                                 | Characters                                                   | Login                                              |
+| -------------------------------------------------------- | ------------------------------------------------------------ | -------------------------------------------------- |
+| ![Mobile Homepage](docs/screenshots/mobile-homepage.png) | ![Mobile Characters](docs/screenshots/mobile-characters.png) | ![Mobile Login](docs/screenshots/mobile-login.png) |
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js
+- PostgreSQL
+
+### Server Setup
+
+```bash
+cd server
+npm install
+```
+
+Create `.env` file:
+
+```env
+PORT=3000
+DB_USER=postgres
+DB_PASSWORD=yourpassword
+DB_NAME=skirk_portal_dev
+JWT_SECRET_KEY=yoursecretkey
+GOOGLE_CLIENT_ID=yourgoogleclientid
+GEMINI_API_KEY=yourgeminikey
+```
+
+Run migration and start:
+
+```bash
+npx sequelize-cli db:create
+npx sequelize-cli db:migrate
+npm run dev
+```
+
+### Client Setup
+
+```bash
+cd client
+npm install
+```
+
+Create `.env` file:
+
+```env
+VITE_BASE_URL=http://localhost:3000
+VITE_GOOGLE_CLIENT_ID=yourgoogleclientid
+```
+
+Start:
+
+```bash
+npm run dev
+```
+
+---
+
+## 🧪 Testing
+
+```bash
+cd server
+
+# Run tests
+npm test
+
+# Run tests with coverage
+npm run test:coverage
+```
+
+Coverage: **95%+** across statements, functions, and lines.
+
+---
+
+## 📁 Project Structure
+
+```
+ip-AhmadSerafu-skirk-portal/
+├── server/
+│   ├── __tests__/
+│   │   ├── auth.test.js
+│   │   ├── build.test.js
+│   │   ├── character.test.js
+│   │   └── ai.test.js
+│   ├── controllers/
+│   ├── helpers/
+│   ├── middlewares/
+│   ├── migrations/
+│   ├── models/
+│   ├── routers/
+│   ├── seeders/
+│   ├── app.js
+│   └── bin/www
+└── client/
+    ├── src/
+    │   ├── app/
+    │   ├── components/
+    │   ├── features/
+    │   ├── layouts/
+    │   └── views/
+    └── index.html
+```
+
+---
+
+## 👤 Author
+
+**Ahmad Serafu** — Hacktiv8 Fullstack JavaScript Bootcamp, Phase 2 Individual Project
