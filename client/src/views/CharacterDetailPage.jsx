@@ -5,6 +5,7 @@ import { url } from "../constants/url";
 import PassiveCard from "../components/PassiveCard";
 import ConstellationCard from "../components/ConstellationCard";
 import SkillCard from "../components/SkillCard";
+import { IoArrowBack } from "react-icons/io5";
 
 export default function CharacterDetailPage() {
   const { id } = useParams();
@@ -45,7 +46,7 @@ export default function CharacterDetailPage() {
           to="/characters"
           className="text-gold hover:text-gold-light font-cinzel text-sm transition-colors"
         >
-          ← Back to Characters
+          <IoArrowBack /> Back to Characters
         </Link>
       </div>
     );
@@ -54,9 +55,10 @@ export default function CharacterDetailPage() {
     <div className="pt-24 px-6 max-w-6xl mx-auto pb-16">
       <Link
         to="/characters"
-        className="text-parchment-dim hover:text-gold text-sm font-cinzel tracking-wider transition-colors"
+        className="text-parchment-dim hover:text-gold text-sm font-cinzel tracking-wider transition-colors flex items-center gap-1"
       >
-        ← Back
+        <IoArrowBack className="mb-0.5" />
+        Back
       </Link>
 
       {/* Header */}
