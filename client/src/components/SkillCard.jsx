@@ -13,7 +13,10 @@ export default function SkillCard({ skill }) {
         <div className="border-t border-void-600 pt-3 flex flex-col gap-1.5">
           <p className="text-xs text-gold font-cinzel mb-1">Base Scaling</p>
           {skill.upgrades.map((upgrade, index) => (
-            <div key={index} className="flex justify-between text-xs">
+            <div
+              key={index}
+              className="flex flex-col sm:flex-row sm:justify-between text-xs gap-0.5"
+            >
               <span className="text-parchment-dim">{upgrade.name}</span>
               <span className="text-parchment font-semibold">
                 {upgrade.value}

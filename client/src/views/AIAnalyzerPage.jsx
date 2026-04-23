@@ -106,7 +106,7 @@ export default function AIAnalyzerPage() {
               <div
                 key={i}
                 onClick={() => charId && toggleCharacter(charId)}
-                className={`flex-1 h-72 rounded-xl overflow-hidden border-2 bg-void-950 ${
+                className={`flex-1 h-44 sm:h-72 lg:h-80 rounded-xl overflow-hidden border-2 bg-void-950 ${
                   charId
                     ? "border-gold/60 cursor-pointer hover:opacity-75 transition-opacity"
                     : "border-void-600 border-dashed"

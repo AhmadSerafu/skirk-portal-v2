@@ -7,6 +7,7 @@ import { fetchCharacters } from "../features/characters/charactersSlice";
 import { GiSwitchWeapon } from "react-icons/gi";
 import { GiFireball } from "react-icons/gi";
 import { GiStarFormation } from "react-icons/gi";
+import { GiEarthAsiaOceania } from "react-icons/gi";
 
 export default function CharactersPage() {
   const { data: characters, loading } = useSelector(
@@ -17,6 +18,7 @@ export default function CharactersPage() {
   const [filterVision, setFilterVision] = useState("");
   const [filterWeapon, setFilterWeapon] = useState("");
   const [filterRarity, setFilterRarity] = useState("");
+  const [filterNation, setFilterNation] = useState("");
 
   const visions = [
     "Pyro",
@@ -29,6 +31,15 @@ export default function CharactersPage() {
   ];
   const weapons = ["Sword", "Claymore", "Polearm", "Bow", "Catalyst"];
   const rarities = [5, 4];
+  const nations = [
+    "Mondstadt",
+    "Liyue",
+    "Inazuma",
+    "Sumeru",
+    "Fontaine",
+    "Natlan",
+    "Snezhnaya",
+  ];
 
   useEffect(() => {
     dispatch(
@@ -36,9 +47,10 @@ export default function CharactersPage() {
         vision: filterVision,
         weapon: filterWeapon,
         rarity: filterRarity,
+        nation: filterNation,
       }),
     );
-  }, [filterVision, filterWeapon, filterRarity]);
+  }, [filterVision, filterWeapon, filterRarity, filterNation]);
 
   if (loading)
     return (
@@ -149,6 +161,39 @@ export default function CharactersPage() {
                   className="font-nunito text-sm text-parchment px-4 py-2 hover:bg-void-600 cursor-pointer"
                 >
                   {rarity}★
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="dropdown dropdown-end">
+            <div
+              tabIndex={0}
+              role="button"
+              className="btn-outline px-3 py-1.5 w-fit flex items-center gap-2"
+            >
+              <GiEarthAsiaOceania className="text-gold text-lg" />
+              <span className="font-cinzel text-xs tracking-widest uppercase">
+                {filterNation || "Nation"}
+              </span>
+            </div>
+            <ul
+              tabIndex={0}
+              className="dropdown-content z-10 mt-1 bg-void-800 border border-void-600 rounded-lg overflow-hidden w-36"
+            >
+              <li
+                onClick={() => setFilterNation("")}
+                className="font-nunito text-sm text-parchment-dim px-4 py-2 hover:bg-void-600 cursor-pointer"
+              >
+                All Nations
+              </li>
+              {nations.map((nation, index) => (
+                <li
+                  key={index}
+                  onClick={() => setFilterNation(nation)}
+                  className="font-nunito text-sm text-parchment px-4 py-2 hover:bg-void-600 cursor-pointer"
+                >
+                  {nation}
                 </li>
               ))}
             </ul>

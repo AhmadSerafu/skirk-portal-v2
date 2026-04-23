@@ -16,8 +16,6 @@ export default function CharacterDetailPage() {
     try {
       setLoading(true);
       const { data } = await axios.get(`${url}/characters/${id}`);
-      console.log(data);
-
       setCharacter(data);
     } catch (error) {
       console.log(error);
@@ -61,20 +59,27 @@ export default function CharacterDetailPage() {
         ← Back
       </Link>
 
-      {/* 3 Column Layout */}
-      <div className="bg-void-800 border border-void-600 rounded-xl p-6 flex flex-row gap-6 mt-6 mb-8 items-start justify-between">
+      {/* Header */}
+      <div className="bg-void-800 border border-void-600 rounded-xl p-6 flex flex-col md:flex-row gap-6 mt-6 mb-8">
         {/* Kiri - Bio */}
-        <div className="w-1/3 flex flex-col gap-3">
-          <div>
-            <p className="text-parchment-dim text-xs font-cinzel tracking-widest uppercase mb-1">
-              {character.nation} · {character.weapon} · {character.vision}
-            </p>
-            <h1 className="font-cinzel text-3xl font-bold text-parchment mb-1">
-              {character.name}
-            </h1>
-            <p className="text-gold font-cinzel text-sm italic">
-              {character.title}
-            </p>
+        <div className="w-full md:w-1/3 flex flex-col gap-3">
+          <div className="flex justify-between items-start gap-3">
+            <div>
+              <p className="text-parchment-dim text-xs font-cinzel tracking-widest uppercase mb-1">
+                {character.nation} · {character.weapon} · {character.vision}
+              </p>
+              <h1 className="font-cinzel text-3xl font-bold text-parchment mb-1">
+                {character.name}
+              </h1>
+              <p className="text-gold font-cinzel text-sm italic">
+                {character.title}
+              </p>
+            </div>
+            <img
+              src={`https://genshin.jmp.blue/characters/${character.id}/icon`}
+              alt={character.name}
+              className="w-16 h-16 mt-2.5 object-contain md:hidden shrink-0"
+            />
           </div>
 
           <div className="flex flex-col gap-1.5">
@@ -117,8 +122,8 @@ export default function CharacterDetailPage() {
           </div>
         </div>
 
-        {/* Tengah - Splash Art */}
-        <div className="w-1/3 bg-white/5 rounded-2xl overflow-hidden flex items-center justify-center">
+        {/* Tengah - Splash Art (hidden mobile) */}
+        <div className="hidden md:flex w-1/3 bg-white/5 rounded-2xl overflow-hidden items-center justify-center">
           <img
             src={`https://genshin.jmp.blue/characters/${character.id}/portrait`}
             alt={character.name}
@@ -126,8 +131,8 @@ export default function CharacterDetailPage() {
           />
         </div>
 
-        {/* Kanan - Constellation */}
-        <div className="w-1/3 flex flex-col items-end gap-2 justify-start">
+        {/* Kanan - Constellation (hidden mobile) */}
+        <div className="hidden md:flex w-1/3 flex-col items-end gap-2 justify-start">
           <img
             src={`https://genshin.jmp.blue/characters/${character.id}/constellation`}
             alt={`${character.name} constellation`}

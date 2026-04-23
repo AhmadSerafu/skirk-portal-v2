@@ -83,44 +83,46 @@ export default function Navbar() {
       </div>
 
       {/* Mobile menu */}
-      {isOpen && (
-        <div className="md:hidden bg-void-900/95 border-t border-gold/20 px-6 py-4 flex flex-col gap-4">
-          {navLinks.map((link) => (
-            <NavLink
-              key={link.to}
-              to={link.to}
-              onClick={() => setIsOpen(false)}
-              className={({ isActive }) =>
-                `font-cinzel text-sm tracking-widest uppercase transition-colors ${
-                  isActive ? "text-gold" : "text-parchment-dim hover:text-gold"
-                }`
-              }
-            >
-              {link.label}
-            </NavLink>
-          ))}
+      <div
+        className={`md:hidden bg-void-900/95 border-t border-gold/20 px-6 flex flex-col gap-4 overflow-hidden transition-all duration-300 ease-in-out ${
+          isOpen ? "max-h-96 py-4 opacity-100" : "max-h-0 py-0 opacity-0"
+        }`}
+      >
+        {navLinks.map((link) => (
+          <NavLink
+            key={link.to}
+            to={link.to}
+            onClick={() => setIsOpen(false)}
+            className={({ isActive }) =>
+              `font-cinzel text-sm tracking-widest uppercase transition-colors ${
+                isActive ? "text-gold" : "text-parchment-dim hover:text-gold"
+              }`
+            }
+          >
+            {link.label}
+          </NavLink>
+        ))}
 
-          {isLoggedIn ? (
-            <button
-              onClick={() => {
-                handleLogout();
-                setIsOpen(false);
-              }}
-              className="btn-outline text-xs py-1.5 px-4 w-fit"
-            >
-              Logout
-            </button>
-          ) : (
-            <Link
-              to="/login"
-              onClick={() => setIsOpen(false)}
-              className="btn-outline text-xs py-1.5 px-4 w-fit"
-            >
-              Login
-            </Link>
-          )}
-        </div>
-      )}
+        {isLoggedIn ? (
+          <button
+            onClick={() => {
+              handleLogout();
+              setIsOpen(false);
+            }}
+            className="btn-outline text-xs py-1.5 px-4 w-fit"
+          >
+            Logout
+          </button>
+        ) : (
+          <Link
+            to="/login"
+            onClick={() => setIsOpen(false)}
+            className="btn-outline text-xs py-1.5 px-4 w-fit"
+          >
+            Login
+          </Link>
+        )}
+      </div>
     </nav>
   );
 }

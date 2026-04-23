@@ -12,9 +12,18 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-linear-to-r from-void-950 via-void-900 to-void-950" />
         <div className="absolute right-0 top-0 w-2/3 h-full opacity-20 bg-linear-to-l from-blue-900 to-transparent" />
 
-        {/* Skirk image */}
+        {/* Skirk image — desktop: kanan, mobile: background */}
         <div className="absolute left-[25%] right-0 top-0 bottom-0 items-center pt-16 overflow-hidden hidden md:flex">
           <img src={skirkImg} alt="Skirk" className="w-full object-contain" />
+        </div>
+
+        {/* Skirk mobile — background dengan opacity */}
+        <div className="absolute inset-0 flex items-start justify-end md:hidden overflow-hidden">
+          <img
+            src={skirkImg}
+            alt="Skirk"
+            className="h-5/6 object-contain opacity-10 translate-y-8 translate-x-8 scale-150"
+          />
         </div>
 
         {/* Content */}
@@ -36,7 +45,10 @@ export default function HomePage() {
               Explore Characters
             </Link>
             {!isLoggedIn && (
-              <Link to="/login" className="btn-outline w-fit px-8 py-3 text-sm">
+              <Link
+                to="/login"
+                className="btn-outline w-fit px-8 py-3 text-sm flex items-center justify-center"
+              >
                 Login
               </Link>
             )}
