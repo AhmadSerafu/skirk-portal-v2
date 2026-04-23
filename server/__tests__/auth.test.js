@@ -1,6 +1,9 @@
 const request = require("supertest");
 const app = require("../app");
 const { Traveler } = require("../models");
+const { OAuth2Client } = require("google-auth-library");
+
+jest.mock("google-auth-library");
 
 beforeAll(async () => {
   await Traveler.create({
@@ -130,5 +133,49 @@ describe("POST /auth/login", () => {
     expect(response.status).toBe(400);
     expect(response.body).toBeInstanceOf(Object);
     expect(response.body).toHaveProperty("message", "Password is required");
+  });
+});
+
+describe("POST /auth/google-login", () => {
+  test("Positive Case - Should login with Google successfully", async () => {
+    OAuth2Client.prototype.verifyIdToken = jest.fn().mockResolvedValue({
+      getPayload: () => ({
+        email: "google-user@gmail.com",
+        email_verified: true,
+      }),
+    });
+
+    const response = await request(app)
+      .post("/auth/google-login")
+      .set("access_token_google", "fake-google-token");
+
+    expect(response.status).toBe(200);
+    expect(response.body).toBeInstanceOf(Object);
+    expect(response.body).toHaveProperty("access_token", expect.any(String));
+  });
+
+  test("Negative Case - Should return 400 if no token provided", async () => {
+    const response = await request(app).post("/auth/google-login");
+
+    expect(response.status).toBe(400);
+    expect(response.body).toBeInstanceOf(Object);
+    expect(response.body).toHaveProperty("message", "Invalid Token");
+  });
+
+  test("Negative Case - Should return 400 if email is not verified", async () => {
+    OAuth2Client.prototype.verifyIdToken = jest.fn().mockResolvedValue({
+      getPayload: () => ({
+        email: "unverified@gmail.com",
+        email_verified: false,
+      }),
+    });
+
+    const response = await request(app)
+      .post("/auth/google-login")
+      .set("access_token_google", "fake-google-token");
+
+    expect(response.status).toBe(400);
+    expect(response.body).toBeInstanceOf(Object);
+    expect(response.body).toHaveProperty("message", "Email is not verified");
   });
 });
