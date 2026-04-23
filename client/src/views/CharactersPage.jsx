@@ -63,7 +63,7 @@ export default function CharactersPage() {
     <div className="pt-24 px-6 pb-12 max-w-6xl mx-auto overflow-hidden">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
         <h1 className="page-title">Characters</h1>
-        <div className="flex gap-3">
+        <div className="flex flex-wrap gap-3">
           {/* Element dropdown */}
           <div className="dropdown dropdown-end">
             <div
