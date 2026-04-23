@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 
 export default function ProtectedRoute() {
   if (!localStorage.getItem("access_token")) {
-    toast.error("You must login first!", { toastId: "auth-error" });
+    toast.warning("You must login first!", { toastId: "auth-error" });
     return <Navigate to="/login" />;
   }
 
