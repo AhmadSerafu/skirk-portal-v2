@@ -36,6 +36,11 @@ function App() {
           <Route path="/ai" element={<AIAnalyzerPage />} />
         </Route>
       </Routes>
+      <footer className="py-6 text-center border-t border-gold/20">
+        <p className="font-nunito text-parchment-dim text-sm">
+          Skirk Portal © 2026
+        </p>
+      </footer>
     </>
   );
 }
