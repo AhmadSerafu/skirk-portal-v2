@@ -72,7 +72,7 @@ export default function AIAnalyzerPage() {
     Overloaded: "bg-orange-600/20 text-orange-400 border-orange-600/40",
     Superconduct: "bg-purple-500/20 text-purple-300 border-purple-500/40",
     "Electro-Charged": "bg-yellow-400/20 text-yellow-300 border-yellow-400/40",
-    Frozen: "bg-cyan-400/20 text-cyan-300 border-cyan-400/40",
+    Freeze: "bg-cyan-400/20 text-cyan-300 border-cyan-400/40",
     Shatter: "bg-cyan-600/20 text-cyan-400 border-cyan-600/40",
     Swirl: "bg-emerald-400/20 text-emerald-300 border-emerald-400/40",
     Crystallize: "bg-yellow-600/20 text-yellow-400 border-yellow-600/40",
