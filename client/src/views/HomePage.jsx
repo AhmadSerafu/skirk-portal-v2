@@ -26,7 +26,7 @@ export default function HomePage() {
             Skirk <br />
             <span className="text-gold">Portal</span>
           </h1>
-          <p className="font-nunito text-parchment-dim text-lg max-w-md mb-8 leading-relaxed">
+          <p className="font-nunito text-parchment-dim text-lg max-w-sm mb-8 leading-relaxed">
             Explore characters, build your dream team, and analyze your synergy
             with the power of AI.
           </p>
