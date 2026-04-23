@@ -41,8 +41,9 @@ export default function HomePage() {
           </p>
 
           <div className="flex gap-4">
-            <Link to="/characters" className="btn-gold w-fit px-8 py-3 text-sm">
-              Explore Characters
+            <Link to="/characters" className="btn-gold w-fit px-6 py-3 text-sm">
+              <span className="hidden sm:inline">Explore Characters</span>
+              <span className="sm:hidden">Explore</span>
             </Link>
             {!isLoggedIn && (
               <Link
