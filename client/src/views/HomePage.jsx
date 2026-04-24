@@ -1,5 +1,34 @@
 import { Link } from "react-router";
 import skirkImg from "../assets/skirk.webp";
+import { GiSwordwoman, GiTeamIdea } from "react-icons/gi";
+import { RiRobot2Line } from "react-icons/ri";
+
+const FEATURES = [
+  {
+    number: "01",
+    icon: GiSwordwoman,
+    title: "Characters",
+    description:
+      "Browse all Genshin Impact characters — filter by element and weapon type.",
+    to: "/characters",
+  },
+  {
+    number: "02",
+    icon: GiTeamIdea,
+    title: "Team Builds",
+    description:
+      "Create and manage your team compositions. Save your favorite builds for quick access.",
+    to: "/builds",
+  },
+  {
+    number: "03",
+    icon: RiRobot2Line,
+    title: "AI Analyzer",
+    description:
+      "Let AI analyze your team synergy, elemental reactions, strengths and weaknesses.",
+    to: "/ai",
+  },
+];
 
 export default function HomePage() {
   const isLoggedIn = !!localStorage.getItem("access_token");
@@ -60,33 +89,37 @@ export default function HomePage() {
       {/* Feature section */}
       <div className="px-12 py-16 max-w-6xl mx-auto w-full">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="card p-6 flex flex-col gap-2">
-            <h3 className="font-cinzel text-gold text-base font-semibold">
-              Characters
-            </h3>
-            <p className="font-nunito text-parchment-dim text-sm leading-relaxed">
-              Browse all Genshin Impact characters — filter by element and
-              weapon type.
-            </p>
-          </div>
-          <div className="card p-6 flex flex-col gap-2">
-            <h3 className="font-cinzel text-gold text-base font-semibold">
-              Team Builds
-            </h3>
-            <p className="font-nunito text-parchment-dim text-sm leading-relaxed">
-              Create and manage your team compositions. Save your favorite
-              builds for quick access.
-            </p>
-          </div>
-          <div className="card p-6 flex flex-col gap-2">
-            <h3 className="font-cinzel text-gold text-base font-semibold">
-              AI Analyzer
-            </h3>
-            <p className="font-nunito text-parchment-dim text-sm leading-relaxed">
-              Let AI analyze your team synergy, elemental reactions, strengths
-              and weaknesses.
-            </p>
-          </div>
+          {FEATURES.map((feature) => (
+            <Link
+              key={feature.number}
+              to={feature.to}
+              className="card p-6 flex flex-col gap-4 border-t-2 border-t-gold/40 hover:border-t-gold hover:shadow-[0_0_20px_rgba(201,168,76,0.1)] transition-all duration-300 group"
+            >
+              {/* Top row: icon + nomor dekoratif */}
+              <div className="flex items-start justify-between">
+                <feature.icon className="text-gold text-2xl" />
+                {/* Nomor besar sebagai dekorasi — opacity rendah */}
+                <span className="font-cinzel text-5xl font-bold text-gold/10 leading-none group-hover:text-gold/20 transition-colors duration-300">
+                  {feature.number}
+                </span>
+              </div>
+
+              {/* Title + description */}
+              <div className="flex flex-col gap-1.5">
+                <h3 className="font-cinzel text-gold text-base font-semibold">
+                  {feature.title}
+                </h3>
+                <p className="font-nunito text-parchment-dim text-sm leading-relaxed">
+                  {feature.description}
+                </p>
+              </div>
+
+              {/* Arrow link di bawah */}
+              <span className="font-cinzel text-xs text-parchment-dim group-hover:text-gold transition-colors duration-300 mt-auto tracking-widest uppercase">
+                Explore →
+              </span>
+            </Link>
+          ))}
         </div>
       </div>
     </div>

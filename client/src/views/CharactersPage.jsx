@@ -41,6 +41,14 @@ export default function CharactersPage() {
     "Snezhnaya",
   ];
 
+  const hiddenNames = new Set([
+    "aloy",
+    "aether",
+    "lumine",
+    "manekin",
+    "manekina",
+  ]);
+
   useEffect(() => {
     dispatch(
       fetchCharacters({
@@ -201,9 +209,17 @@ export default function CharactersPage() {
         </div>
       </div>
       <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-        {characters.map((character, index) => (
-          <CharacterCard key={index} character={character} />
-        ))}
+        {characters
+          .filter(
+            (character) =>
+              !hiddenNames.has((character.name || "").trim().toLowerCase()),
+          )
+          .map((character) => (
+            <CharacterCard
+              key={character.id ?? character.name}
+              character={character}
+            />
+          ))}
       </div>
     </div>
   );

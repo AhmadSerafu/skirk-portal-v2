@@ -31,6 +31,7 @@ export default function EditBuildPage() {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
       });
+
       setName(data.name);
       setDescription(data.description);
       setSelectedCharacter(
@@ -84,7 +85,7 @@ export default function EditBuildPage() {
   useEffect(() => {
     fetchBuild();
     dispatch(fetchCharacters());
-  }, [id]);
+  }, []);
 
   return (
     <BuildFormPage

@@ -41,7 +41,7 @@ export default function BuildFormPage({
     <div className="min-h-screen px-6 pt-20 pb-12">
       <div className="max-w-5xl mx-auto flex flex-col gap-6">
         {/* Header */}
-        <div className="flex flex-col gap-1 mb-6">
+        <div className="flex flex-col gap-1 mb-2">
           <button
             onClick={onBack}
             className="text-parchment-dim hover:text-gold transition-colors font-cinzel text-xs flex items-center gap-1 w-fit"
@@ -80,17 +80,20 @@ export default function BuildFormPage({
               />
             </div>
 
-            {/* Team preview */}
-            <div className="grid grid-cols-2 gap-2">
+            {/* Team preview
+                Mobile  : 4 kolom portrait (aspect-[2/5])
+                Desktop : 2 kolom square  (lg:grid-cols-2 lg:aspect-square)
+            */}
+            <div className="grid grid-cols-4 lg:grid-cols-2 gap-2">
               {Array.from({ length: 4 }).map((_, i) => {
                 const charId = selectedCharacter[i];
-                const charObj = characters.find((c) => c.id === charId);
+                const charObj = characters.find((c) => c.name === charId);
                 const elemClass = ELEMENT_COLORS[charObj?.vision] || "";
                 return (
                   <div
                     key={i}
                     onClick={() => charId && toggleCharacter(charId)}
-                    className={`relative aspect-square rounded-xl overflow-hidden border-2 transition-all duration-200 ${
+                    className={`relative aspect-[2/5] lg:aspect-square rounded-xl overflow-hidden border-2 transition-all duration-200 ${
                       charId
                         ? `${elemClass} cursor-pointer hover:opacity-75 shadow-lg`
                         : "border-void-600 border-dashed bg-void-950/50"
@@ -126,7 +129,7 @@ export default function BuildFormPage({
             </div>
 
             {/* Buttons */}
-            <div className="flex flex-col gap-2 mt-auto pt-2">
+            <div className="flex flex-col gap-2 pt-2">
               <button
                 onClick={handleSubmit}
                 className="btn-gold"
@@ -156,28 +159,26 @@ export default function BuildFormPage({
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                 />
-
                 <div className="grid grid-cols-5 sm:grid-cols-6 md:grid-cols-7 gap-2 max-h-[560px] overflow-y-auto pr-1 no-scrollbar">
                   {characters
                     .filter((char) =>
                       char.name.toLowerCase().includes(search.toLowerCase()),
                     )
                     .map((char) => {
-                      const isSelected = selectedCharacter.includes(char.id);
+                      const isSelected = selectedCharacter.includes(char.name);
                       const elemBorder =
                         ELEMENT_COLORS[char.vision] || "border-void-600";
                       const elemBg = ELEMENT_BG[char.vision] || "";
                       return (
                         <button
-                          key={char.id}
-                          onClick={() => toggleCharacter(char.id)}
+                          key={char.name}
+                          onClick={() => toggleCharacter(char.name)}
                           className={`relative flex flex-col items-center gap-1 p-1 rounded-xl border-2 transition-all duration-150 cursor-pointer ${
                             isSelected
                               ? `${elemBorder} ${elemBg} shadow-lg scale-95`
                               : "border-void-600 hover:border-void-500 bg-void-800"
                           }`}
                         >
-                          {/* Selected checkmark */}
                           {isSelected && (
                             <div className="absolute top-1 right-1 z-10 w-4 h-4 rounded-full bg-gold flex items-center justify-center">
                               <span className="text-void-900 text-[10px] font-black">
@@ -185,7 +186,6 @@ export default function BuildFormPage({
                               </span>
                             </div>
                           )}
-
                           <div className="w-full aspect-square overflow-hidden rounded-lg bg-void-950">
                             <img
                               src={char.images?.icon || ""}

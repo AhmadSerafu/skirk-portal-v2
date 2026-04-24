@@ -62,7 +62,6 @@ export default function AddBuildPage() {
 
   useEffect(() => {
     dispatch(fetchCharacters());
-    console.log(characters[0]);
   }, []);
 
   return (

@@ -6,12 +6,7 @@ import PassiveCard from "../components/PassiveCard";
 import ConstellationCard from "../components/ConstellationCard";
 import SkillCard from "../components/SkillCard";
 import { IoArrowBack } from "react-icons/io5";
-import {
-  GiSwordSpin,
-  GiPowerLightning,
-  GiBookmarklet,
-  GiCrystalWand,
-} from "react-icons/gi";
+import { GiSwordSpin, GiPowerLightning, GiBookmarklet } from "react-icons/gi";
 
 // ─── Element badge color ────────────────────────────────────────────────────
 const ELEMENT_COLORS = {
@@ -29,62 +24,11 @@ const RARITY_COLORS = {
   4: "text-purple-400",
 };
 
-// ─── Ascension phase labels ──────────────────────────────────────────────────
-const PHASE_LABELS = {
-  ascend1: "Phase 1 (Lv 20→40)",
-  ascend2: "Phase 2 (Lv 40→50)",
-  ascend3: "Phase 3 (Lv 50→60)",
-  ascend4: "Phase 4 (Lv 60→70)",
-  ascend5: "Phase 5 (Lv 70→80)",
-  ascend6: "Phase 6 (Lv 80→90)",
-};
-
-const RARITY_BORDER = {
-  5: "border-gold/50",
-  4: "border-purple-400/50",
-  3: "border-blue-400/40",
-  2: "border-green-400/40",
-  1: "border-void-500",
-};
-
-// ─── Material item tile ──────────────────────────────────────────────────────
-function MatItem({ item }) {
-  return (
-    <div className="flex flex-col items-center gap-1 w-16">
-      <div
-        className={`w-12 h-12 rounded-lg border bg-void-900 overflow-hidden flex items-center justify-center ${RARITY_BORDER[item.rarity] || "border-void-600"}`}
-      >
-        {item.image ? (
-          <img
-            src={item.image}
-            alt={item.name}
-            className="w-full h-full object-contain p-0.5"
-            onError={(e) => {
-              e.target.style.display = "none";
-            }}
-          />
-        ) : (
-          <GiCrystalWand className="text-parchment-dim text-lg" />
-        )}
-      </div>
-      {item.count != null && (
-        <span className="text-[10px] font-bold text-gold">
-          {item.count.toLocaleString()}
-        </span>
-      )}
-      <span className="text-[9px] text-parchment-dim text-center leading-tight line-clamp-2">
-        {item.name}
-      </span>
-    </div>
-  );
-}
-
 // ─── Tabs config ─────────────────────────────────────────────────────────────
 const TABS = [
   { id: "skills", label: "Skills", icon: GiSwordSpin },
   { id: "passive", label: "Passives", icon: GiBookmarklet },
   { id: "constellations", label: "Constellations", icon: GiPowerLightning },
-  { id: "materials", label: "Materials", icon: GiCrystalWand },
 ];
 
 const SKILL_UNLOCK = ["Normal Attack", "Elemental Skill", "Elemental Burst"];
@@ -138,12 +82,9 @@ export default function CharacterDetailPage() {
       </div>
     );
 
-  const hasAscensionCosts =
-    character.costs && Object.keys(character.costs).length > 0;
-
   return (
     <div className="pt-20 pb-16">
-      <div className="max-w-6xl mx-auto px-6 pt-6">
+      <div className="max-w-6xl mx-auto px-6">
         <Link
           to="/characters"
           className="text-parchment-dim hover:text-gold text-xs font-cinzel tracking-wider transition-colors flex items-center gap-1 w-fit"
@@ -152,8 +93,12 @@ export default function CharacterDetailPage() {
           Back to Characters
         </Link>
       </div>
+
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
-      <div className="relative w-full overflow-hidden" style={{ height: 480 }}>
+      <div
+        className="relative w-full overflow-hidden mt-2"
+        style={{ height: 480 }}
+      >
         {/* Splash art background */}
         {character.images?.splash && (
           <img
@@ -179,8 +124,8 @@ export default function CharacterDetailPage() {
               <img
                 src={
                   character.images?.portrait ||
-                  character.images?.card ||
                   character.images?.icon ||
+                  character.images?.card ||
                   ""
                 }
                 alt={character.name}
@@ -264,9 +209,8 @@ export default function CharacterDetailPage() {
             )}
           </div>
 
-          {/* ── Right: Voice Actors + Constellation image ─────────── */}
+          {/* ── Right: Voice Actors ───────────────────────────────── */}
           <div className="hidden lg:flex flex-col gap-4 shrink-0 min-w-44 justify-end">
-            {/* CV */}
             {character.cv && Object.keys(character.cv).length > 0 && (
               <div className="bg-void-950/60 border border-void-600/50 rounded-xl p-4 backdrop-blur-sm">
                 <p className="font-cinzel text-xs text-gold uppercase tracking-widest mb-3">
@@ -347,62 +291,6 @@ export default function CharacterDetailPage() {
                 index={i}
               />
             ))}
-          </div>
-        )}
-
-        {/* ── Materials ────────────────────────────────────────────── */}
-        {activeTab === "materials" && (
-          <div className="flex flex-col gap-8">
-            {/* Ascension costs */}
-            {hasAscensionCosts ? (
-              <div>
-                <h2 className="font-cinzel text-sm text-gold uppercase tracking-widest mb-4">
-                  Ascension Materials
-                </h2>
-                <div className="flex flex-col gap-4">
-                  {Object.entries(character.costs).map(([phase, items]) => (
-                    <div key={phase} className="card p-4">
-                      <p className="font-cinzel text-xs text-parchment-dim uppercase tracking-widest mb-3">
-                        {PHASE_LABELS[phase] || phase}
-                      </p>
-                      <div className="flex flex-wrap gap-4">
-                        {items.map((item, i) => (
-                          <MatItem key={i} item={item} />
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ) : (
-              <p className="text-parchment-dim text-sm font-cinzel text-center py-8">
-                No ascension data available.
-              </p>
-            )}
-
-            {/* Talent upgrade materials */}
-            {character.talentMaterials?.items?.length > 0 && (
-              <div>
-                <h2 className="font-cinzel text-sm text-gold uppercase tracking-widest mb-4">
-                  Talent Materials
-                </h2>
-                <div className="card p-4">
-                  {character.talentMaterials.availability && (
-                    <p className="font-cinzel text-xs text-parchment-dim mb-3">
-                      Available:{" "}
-                      <span className="text-parchment">
-                        {character.talentMaterials.availability.join(", ")}
-                      </span>
-                    </p>
-                  )}
-                  <div className="flex flex-wrap gap-4">
-                    {character.talentMaterials.items.map((item, i) => (
-                      <MatItem key={i} item={item} />
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
         )}
       </div>

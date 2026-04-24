@@ -7,10 +7,9 @@ const enkaUrl = (filename) =>
 
 const enrichBuildCharacters = (buildCharacters) =>
   buildCharacters.map((bc) => {
-    const normalizedId = bc.characterId.replace(/-/g, " ");
-    const char = genshindb.characters(normalizedId);
+    const char = genshindb.characters(bc.characterId);
     return {
-      ...(bc.toJSON ? bc.toJSON() : bc),
+      ...bc.toJSON(),
       icon: enkaUrl(char?.images?.filename_icon) || null,
       vision: char?.elementText || null,
       splash: enkaUrl(char?.images?.filename_gachaSplash) || null,

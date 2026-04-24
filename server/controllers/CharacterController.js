@@ -4,35 +4,6 @@ const ENKA_BASE = "https://enka.network/ui";
 const enkaUrl = (filename) =>
   filename?.trim() ? `${ENKA_BASE}/${filename}.png` : null;
 
-// Enrich a cost array: adds image + rarity to each material
-const enrichMaterialList = (items = []) =>
-  items.map((item) => {
-    try {
-      const mat = genshindb.materials(item.name);
-      return {
-        name: item.name,
-        count: item.count,
-        rarity: mat?.rarity ?? null,
-        image: enkaUrl(mat?.images?.filename_icon) || null, // ← fix
-      };
-    } catch {
-      return { name: item.name, count: item.count, rarity: null, image: null };
-    }
-  });
-
-const testMat = genshindb.materials("Mora");
-console.log("mat images keys:", Object.keys(testMat?.images || {}));
-
-// Enrich ALL ascension phases
-const enrichCosts = (costs) => {
-  if (!costs) return null;
-  const result = {};
-  for (const [phase, items] of Object.entries(costs)) {
-    result[phase] = enrichMaterialList(items);
-  }
-  return result;
-};
-
 class CharacterController {
   static getCharacters(req, res, next) {
     try {
@@ -66,18 +37,20 @@ class CharacterController {
 
       if (vision)
         characters = characters.filter(
-          (c) => c.vision?.toLowerCase() === vision.toLowerCase(),
+          (char) => char.vision?.toLowerCase() === vision.toLowerCase(),
         );
       if (weapon)
         characters = characters.filter(
-          (c) => c.weapon?.toLowerCase() === weapon.toLowerCase(),
+          (char) => char.weapon?.toLowerCase() === weapon.toLowerCase(),
         );
       if (nation)
         characters = characters.filter(
-          (c) => c.nation?.toLowerCase() === nation.toLowerCase(),
+          (char) => char.nation?.toLowerCase() === nation.toLowerCase(),
         );
       if (rarity)
-        characters = characters.filter((c) => c.rarity === Number(rarity));
+        characters = characters.filter(
+          (char) => char.rarity === Number(rarity),
+        );
 
       res.status(200).json(characters);
     } catch (error) {
@@ -90,31 +63,12 @@ class CharacterController {
       const { id } = req.params;
 
       const character = genshindb.characters(String(id));
+
       if (!character)
         throw { name: "NotFound", message: "Character not found" };
 
       const talents = genshindb.talents(character.name);
       const constellations = genshindb.constellations(character.name);
-
-      // Talent upgrade materials — query by character name
-      let talentMaterials = null;
-      try {
-        const tm = genshindb.talentmaterials(character.name);
-        if (tm) {
-          talentMaterials = {
-            availability: tm.availability ?? null, // days of the week available
-            items: enrichMaterialList(
-              [
-                tm.talentBook && { name: tm.talentBook, count: null },
-                tm.bossDropName && { name: tm.bossDropName, count: null },
-                tm.specialtyName && { name: tm.specialtyName, count: null },
-              ].filter(Boolean),
-            ),
-          };
-        }
-      } catch {
-        talentMaterials = null;
-      }
 
       res.status(200).json({
         id: character.id,
@@ -129,8 +83,6 @@ class CharacterController {
         birthday: character.birthday,
         constellation: character.constellation,
         cv: character.cv,
-        costs: enrichCosts(character.costs),
-        talentMaterials,
         skillTalents: talents
           ? [talents.combat1, talents.combat2, talents.combat3].filter(Boolean)
           : [],
