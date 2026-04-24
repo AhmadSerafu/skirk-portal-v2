@@ -6,33 +6,120 @@ import PassiveCard from "../components/PassiveCard";
 import ConstellationCard from "../components/ConstellationCard";
 import SkillCard from "../components/SkillCard";
 import { IoArrowBack } from "react-icons/io5";
+import {
+  GiSwordSpin,
+  GiPowerLightning,
+  GiBookmarklet,
+  GiCrystalWand,
+} from "react-icons/gi";
 
+// ─── Element badge color ────────────────────────────────────────────────────
+const ELEMENT_COLORS = {
+  Pyro: "bg-red-500/20 text-red-400 border-red-500/40",
+  Hydro: "bg-blue-500/20 text-blue-400 border-blue-500/40",
+  Cryo: "bg-cyan-400/20 text-cyan-300 border-cyan-400/40",
+  Electro: "bg-purple-500/20 text-purple-400 border-purple-500/40",
+  Anemo: "bg-emerald-400/20 text-emerald-400 border-emerald-400/40",
+  Geo: "bg-yellow-500/20 text-yellow-400 border-yellow-500/40",
+  Dendro: "bg-green-500/20 text-green-400 border-green-500/40",
+};
+
+const RARITY_COLORS = {
+  5: "text-gold",
+  4: "text-purple-400",
+};
+
+// ─── Ascension phase labels ──────────────────────────────────────────────────
+const PHASE_LABELS = {
+  ascend1: "Phase 1 (Lv 20→40)",
+  ascend2: "Phase 2 (Lv 40→50)",
+  ascend3: "Phase 3 (Lv 50→60)",
+  ascend4: "Phase 4 (Lv 60→70)",
+  ascend5: "Phase 5 (Lv 70→80)",
+  ascend6: "Phase 6 (Lv 80→90)",
+};
+
+const RARITY_BORDER = {
+  5: "border-gold/50",
+  4: "border-purple-400/50",
+  3: "border-blue-400/40",
+  2: "border-green-400/40",
+  1: "border-void-500",
+};
+
+// ─── Material item tile ──────────────────────────────────────────────────────
+function MatItem({ item }) {
+  return (
+    <div className="flex flex-col items-center gap-1 w-16">
+      <div
+        className={`w-12 h-12 rounded-lg border bg-void-900 overflow-hidden flex items-center justify-center ${RARITY_BORDER[item.rarity] || "border-void-600"}`}
+      >
+        {item.image ? (
+          <img
+            src={item.image}
+            alt={item.name}
+            className="w-full h-full object-contain p-0.5"
+            onError={(e) => {
+              e.target.style.display = "none";
+            }}
+          />
+        ) : (
+          <GiCrystalWand className="text-parchment-dim text-lg" />
+        )}
+      </div>
+      {item.count != null && (
+        <span className="text-[10px] font-bold text-gold">
+          {item.count.toLocaleString()}
+        </span>
+      )}
+      <span className="text-[9px] text-parchment-dim text-center leading-tight line-clamp-2">
+        {item.name}
+      </span>
+    </div>
+  );
+}
+
+// ─── Tabs config ─────────────────────────────────────────────────────────────
+const TABS = [
+  { id: "skills", label: "Skills", icon: GiSwordSpin },
+  { id: "passive", label: "Passives", icon: GiBookmarklet },
+  { id: "constellations", label: "Constellations", icon: GiPowerLightning },
+  { id: "materials", label: "Materials", icon: GiCrystalWand },
+];
+
+const SKILL_UNLOCK = ["Normal Attack", "Elemental Skill", "Elemental Burst"];
+const PASSIVE_UNLOCK = [
+  "1st Ascension Passive",
+  "4th Ascension Passive",
+  "Utility Passive",
+];
+
+// ─── Main page ────────────────────────────────────────────────────────────────
 export default function CharacterDetailPage() {
   const { id } = useParams();
   const [character, setCharacter] = useState({});
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("skills");
 
-  const fetchCharacter = async () => {
-    try {
-      setLoading(true);
-      const { data } = await axios.get(`${url}/characters/${id}`);
-      setCharacter(data);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const fetchCharacter = async () => {
+      try {
+        setLoading(true);
+        const { data } = await axios.get(`${url}/characters/${id}`);
+        setCharacter(data);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchCharacter();
-  }, []);
+  }, [id]);
 
   if (loading)
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <span className="loading loading-spinner text-gold w-16 h-16"></span>
+        <span className="loading loading-spinner text-gold w-16 h-16" />
       </div>
     );
 
@@ -44,169 +131,281 @@ export default function CharacterDetailPage() {
         </p>
         <Link
           to="/characters"
-          className="text-gold hover:text-gold-light font-cinzel text-sm transition-colors"
+          className="text-gold hover:text-gold-light font-cinzel text-sm transition-colors flex items-center gap-1"
         >
           <IoArrowBack /> Back to Characters
         </Link>
       </div>
     );
 
-  return (
-    <div className="pt-24 px-6 max-w-6xl mx-auto pb-16">
-      <Link
-        to="/characters"
-        className="text-parchment-dim hover:text-gold text-sm font-cinzel tracking-wider transition-colors flex items-center gap-1"
-      >
-        <IoArrowBack className="mb-0.5" />
-        Back
-      </Link>
+  const hasAscensionCosts =
+    character.costs && Object.keys(character.costs).length > 0;
 
-      {/* Header */}
-      <div className="bg-void-800 border border-void-600 rounded-xl p-6 flex flex-col md:flex-row gap-6 mt-6 mb-8">
-        {/* Kiri - Bio */}
-        <div className="w-full md:w-1/3 flex flex-col gap-3">
-          <div className="flex justify-between items-start gap-3">
+  return (
+    <div className="pt-20 pb-16">
+      <div className="max-w-6xl mx-auto px-6 pt-6">
+        <Link
+          to="/characters"
+          className="text-parchment-dim hover:text-gold text-xs font-cinzel tracking-wider transition-colors flex items-center gap-1 w-fit"
+        >
+          <IoArrowBack className="mb-0.5" />
+          Back to Characters
+        </Link>
+      </div>
+      {/* ── HERO ─────────────────────────────────────────────────────────── */}
+      <div className="relative w-full overflow-hidden" style={{ height: 480 }}>
+        {/* Splash art background */}
+        {character.images?.splash && (
+          <img
+            src={character.images.splash}
+            alt=""
+            className="absolute inset-0 w-full h-full object-cover object-center scale-105"
+            style={{ filter: "blur(2px) brightness(0.55)" }}
+          />
+        )}
+
+        {/* Left-to-right + bottom gradients for readability */}
+        <div className="absolute inset-0 bg-gradient-to-r from-void-900/98 via-void-900/70 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-void-900 via-transparent to-void-900/50" />
+
+        {/* Content */}
+        <div className="relative z-10 h-full max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-end gap-8 pb-10 pt-8">
+          {/* ── Left: portrait image ──────────────────────────────── */}
+          <div className="hidden md:block shrink-0">
+            <div
+              className={`rounded-2xl overflow-hidden border-2 shadow-2xl ${character.rarity === 5 ? "border-gold/40 shadow-gold/10" : "border-purple-500/40 shadow-purple-500/10"}`}
+              style={{ width: 180, height: 240 }}
+            >
+              <img
+                src={
+                  character.images?.portrait ||
+                  character.images?.card ||
+                  character.images?.icon ||
+                  ""
+                }
+                alt={character.name}
+                className="w-full h-full object-cover object-top"
+              />
+            </div>
+          </div>
+
+          {/* ── Center: character info ────────────────────────────── */}
+          <div className="flex-1 flex flex-col gap-3">
+            {/* Nation · Weapon · Element */}
+            <p className="text-parchment-dim text-xs font-cinzel tracking-widest uppercase">
+              {[character.nation, character.weapon, character.vision]
+                .filter(Boolean)
+                .join(" · ")}
+            </p>
+
+            {/* Name + title */}
             <div>
-              <p className="text-parchment-dim text-xs font-cinzel tracking-widest uppercase mb-1">
-                {character.nation} · {character.weapon} · {character.vision}
-              </p>
-              <h1 className="font-cinzel text-3xl font-bold text-parchment mb-1">
+              <h1 className="font-cinzel text-4xl md:text-5xl font-bold text-parchment leading-tight drop-shadow-lg">
                 {character.name}
               </h1>
-              <p className="text-gold font-cinzel text-sm italic">
+              <p className="text-gold font-cinzel text-base italic mt-1">
                 {character.title}
               </p>
             </div>
-            <img
-              src={`https://genshin.jmp.blue/characters/${character.id}/icon`}
-              alt={character.name}
-              className="w-16 h-16 mt-2.5 object-contain md:hidden shrink-0"
-            />
+
+            {/* Rarity + element badge */}
+            <div className="flex items-center gap-3 flex-wrap">
+              <span
+                className={`font-bold text-lg tracking-widest ${RARITY_COLORS[character.rarity] || "text-parchment"}`}
+              >
+                {"★".repeat(character.rarity)}
+              </span>
+              <span
+                className={`text-xs px-3 py-1 rounded-full border font-semibold ${ELEMENT_COLORS[character.vision] || "bg-void-700 text-parchment-dim border-void-500"}`}
+              >
+                {character.vision}
+              </span>
+            </div>
+
+            {/* Quick facts */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-8 gap-y-1.5 mt-1">
+              {character.constellation && (
+                <div>
+                  <p className="text-parchment-dim text-[10px] uppercase tracking-widest font-cinzel">
+                    Constellation
+                  </p>
+                  <p className="text-parchment text-xs font-semibold">
+                    {character.constellation}
+                  </p>
+                </div>
+              )}
+              {character.affiliation && (
+                <div>
+                  <p className="text-parchment-dim text-[10px] uppercase tracking-widest font-cinzel">
+                    Affiliation
+                  </p>
+                  <p className="text-parchment text-xs font-semibold">
+                    {character.affiliation}
+                  </p>
+                </div>
+              )}
+              {character.birthday && (
+                <div>
+                  <p className="text-parchment-dim text-[10px] uppercase tracking-widest font-cinzel">
+                    Birthday
+                  </p>
+                  <p className="text-parchment text-xs font-semibold">
+                    {character.birthday}
+                  </p>
+                </div>
+              )}
+            </div>
+
+            {/* Description */}
+            {character.description && (
+              <p className="text-parchment-dim text-sm leading-relaxed max-w-xl mt-1">
+                {character.description.replace(/\*\*/g, "")}
+              </p>
+            )}
           </div>
 
-          <div className="flex flex-col gap-1.5">
-            <p className="text-parchment-dim text-xs">
-              Rarity:{" "}
-              <span className="text-gold">{"★".repeat(character.rarity)}</span>
-            </p>
-            <p className="text-parchment-dim text-xs">
-              Constellation:{" "}
-              <span className="text-parchment font-semibold">
-                {character.constellation}
-              </span>
-            </p>
-            <p className="text-parchment-dim text-xs">
-              Affiliation:{" "}
-              <span className="text-parchment font-semibold">
-                {character.affiliation}
-              </span>
-            </p>
-            <p className="text-parchment-dim text-xs">
-              Birthday:{" "}
-              <span className="text-parchment font-semibold">
-                {character.birthday === "0000-00-00"
-                  ? "Unknown"
-                  : character.birthday?.slice(5)}
-              </span>
-            </p>
-            <p className="text-parchment-dim text-xs">
-              Release:{" "}
-              <span className="text-parchment font-semibold">
-                {character.release}
-              </span>
-            </p>
+          {/* ── Right: Voice Actors + Constellation image ─────────── */}
+          <div className="hidden lg:flex flex-col gap-4 shrink-0 min-w-44 justify-end">
+            {/* CV */}
+            {character.cv && Object.keys(character.cv).length > 0 && (
+              <div className="bg-void-950/60 border border-void-600/50 rounded-xl p-4 backdrop-blur-sm">
+                <p className="font-cinzel text-xs text-gold uppercase tracking-widest mb-3">
+                  Voice Actors
+                </p>
+                <div className="flex flex-col gap-2.5">
+                  {Object.entries(character.cv).map(([lang, name]) => (
+                    <div key={lang}>
+                      <p className="text-parchment-dim text-[10px] uppercase tracking-widest">
+                        {lang}
+                      </p>
+                      <p className="text-parchment text-sm font-semibold leading-tight">
+                        {name}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
-
-          <div className="border-t border-void-600 pt-3">
-            <p className="text-parchment-dim text-sm leading-relaxed">
-              {character.description}
-            </p>
-          </div>
-        </div>
-
-        {/* Tengah - Splash Art (hidden mobile) */}
-        <div className="hidden md:flex w-1/3 bg-white/5 rounded-2xl overflow-hidden items-center justify-center">
-          <img
-            src={`https://genshin.jmp.blue/characters/${character.id}/portrait`}
-            alt={character.name}
-            className="w-full h-80 object-contain object-top"
-          />
-        </div>
-
-        {/* Kanan - Constellation (hidden mobile) */}
-        <div className="hidden md:flex w-1/3 flex-col items-end gap-2 justify-start">
-          <img
-            src={`https://genshin.jmp.blue/characters/${character.id}/constellation`}
-            alt={`${character.name} constellation`}
-            className="w-60 h-72 object-cover rounded-xl"
-          />
-          <p className="font-cinzel text-sm text-gold w-60 text-center">
-            {character.constellation}
-          </p>
         </div>
       </div>
 
-      {/* Tabs */}
-      <div className="flex gap-2 mb-4">
-        <button
-          onClick={() => setActiveTab("skills")}
-          className={`font-cinzel text-sm tracking-wider px-4 py-2 rounded-lg transition-all ${
-            activeTab === "skills"
-              ? "bg-gold text-void-900 font-bold"
-              : "text-parchment-dim hover:text-gold"
-          }`}
-        >
-          Skills
-        </button>
-        <button
-          onClick={() => setActiveTab("passive")}
-          className={`font-cinzel text-sm tracking-wider px-4 py-2 rounded-lg transition-all ${
-            activeTab === "passive"
-              ? "bg-gold text-void-900 font-bold"
-              : "text-parchment-dim hover:text-gold"
-          }`}
-        >
-          Passives
-        </button>
-        <button
-          onClick={() => setActiveTab("constellations")}
-          className={`font-cinzel text-sm tracking-wider px-4 py-2 rounded-lg transition-all ${
-            activeTab === "constellations"
-              ? "bg-gold text-void-900 font-bold"
-              : "text-parchment-dim hover:text-gold"
-          }`}
-        >
-          Constellations
-        </button>
+      {/* ── TABS + CONTENT ───────────────────────────────────────────────── */}
+      <div className="max-w-6xl mx-auto px-6 mt-8">
+        {/* Tab bar */}
+        <div className="flex gap-1 border-b border-void-600 mb-6 overflow-x-auto no-scrollbar">
+          {TABS.map(({ id: tid, label, icon: Icon }) => (
+            <button
+              key={tid}
+              onClick={() => setActiveTab(tid)}
+              className={`flex items-center gap-2 px-4 py-2.5 font-cinzel text-xs tracking-widest uppercase transition-all shrink-0 border-b-2 -mb-px ${
+                activeTab === tid
+                  ? "border-gold text-gold"
+                  : "border-transparent text-parchment-dim hover:text-parchment"
+              }`}
+            >
+              <Icon className="text-base" />
+              {label}
+            </button>
+          ))}
+        </div>
+
+        {/* ── Skills ───────────────────────────────────────────────── */}
+        {activeTab === "skills" && (
+          <div className="flex flex-col gap-3">
+            {character.skillTalents?.map((skill, i) => (
+              <SkillCard
+                key={i}
+                skill={{ ...skill, unlock: SKILL_UNLOCK[i] || "" }}
+              />
+            ))}
+          </div>
+        )}
+
+        {/* ── Passives ─────────────────────────────────────────────── */}
+        {activeTab === "passive" && (
+          <div className="flex flex-col gap-3">
+            {character.passiveTalents?.map((passive, i) => (
+              <PassiveCard
+                key={i}
+                passive={{ ...passive, unlock: PASSIVE_UNLOCK[i] || "" }}
+              />
+            ))}
+          </div>
+        )}
+
+        {/* ── Constellations ───────────────────────────────────────── */}
+        {activeTab === "constellations" && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {character.constellations?.map((c, i) => (
+              <ConstellationCard
+                key={i}
+                constellation={{
+                  ...c,
+                  unlock: `Constellation Lv. ${i + 1}`,
+                }}
+                index={i}
+              />
+            ))}
+          </div>
+        )}
+
+        {/* ── Materials ────────────────────────────────────────────── */}
+        {activeTab === "materials" && (
+          <div className="flex flex-col gap-8">
+            {/* Ascension costs */}
+            {hasAscensionCosts ? (
+              <div>
+                <h2 className="font-cinzel text-sm text-gold uppercase tracking-widest mb-4">
+                  Ascension Materials
+                </h2>
+                <div className="flex flex-col gap-4">
+                  {Object.entries(character.costs).map(([phase, items]) => (
+                    <div key={phase} className="card p-4">
+                      <p className="font-cinzel text-xs text-parchment-dim uppercase tracking-widest mb-3">
+                        {PHASE_LABELS[phase] || phase}
+                      </p>
+                      <div className="flex flex-wrap gap-4">
+                        {items.map((item, i) => (
+                          <MatItem key={i} item={item} />
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <p className="text-parchment-dim text-sm font-cinzel text-center py-8">
+                No ascension data available.
+              </p>
+            )}
+
+            {/* Talent upgrade materials */}
+            {character.talentMaterials?.items?.length > 0 && (
+              <div>
+                <h2 className="font-cinzel text-sm text-gold uppercase tracking-widest mb-4">
+                  Talent Materials
+                </h2>
+                <div className="card p-4">
+                  {character.talentMaterials.availability && (
+                    <p className="font-cinzel text-xs text-parchment-dim mb-3">
+                      Available:{" "}
+                      <span className="text-parchment">
+                        {character.talentMaterials.availability.join(", ")}
+                      </span>
+                    </p>
+                  )}
+                  <div className="flex flex-wrap gap-4">
+                    {character.talentMaterials.items.map((item, i) => (
+                      <MatItem key={i} item={item} />
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
       </div>
-
-      {activeTab === "skills" && (
-        <div className="flex flex-col gap-3">
-          {character.skillTalents?.map((skill, index) => (
-            <SkillCard key={index} skill={skill} />
-          ))}
-        </div>
-      )}
-
-      {activeTab === "passive" && (
-        <div className="flex flex-col gap-3">
-          {character.passiveTalents?.map((passive, index) => (
-            <PassiveCard key={index} passive={passive} />
-          ))}
-        </div>
-      )}
-
-      {activeTab === "constellations" && (
-        <div className="flex flex-col gap-3">
-          {character.constellations?.map((constellation, index) => (
-            <ConstellationCard
-              key={index}
-              constellation={constellation}
-              index={index}
-            />
-          ))}
-        </div>
-      )}
     </div>
   );
 }

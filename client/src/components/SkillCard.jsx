@@ -6,7 +6,7 @@ export default function SkillCard({ skill }) {
       </p>
       <p className="text-xs text-gold mb-2">{skill.unlock}</p>
       <p className="text-parchment-dim text-sm leading-relaxed mb-4">
-        {skill.description}
+        {skill.description?.replace(/\*\*/g, "")}
       </p>
 
       {skill.upgrades?.length > 0 && (

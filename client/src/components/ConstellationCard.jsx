@@ -10,7 +10,7 @@ export default function ConstellationCard({ constellation, index }) {
         </p>
         <p className="text-xs text-gold mb-2">{constellation.unlock}</p>
         <p className="text-parchment-dim text-sm leading-relaxed">
-          {constellation.description}
+          {constellation.description?.replace(/\*\*/g, "")}
         </p>
       </div>
     </div>

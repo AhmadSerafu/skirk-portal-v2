@@ -1,1 +1,1 @@
-export const url = "https://api.skirk.my.id";
+export const url = "http://localhost:3000";

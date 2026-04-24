@@ -6,7 +6,7 @@ export default function PassiveCard({ passive }) {
       </p>
       <p className="text-xs text-gold mb-2">{passive.unlock}</p>
       <p className="text-parchment-dim text-sm leading-relaxed">
-        {passive.description}
+        {passive.description?.replace(/\*\*/g, "")}
       </p>
     </div>
   );
