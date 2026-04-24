@@ -19,6 +19,7 @@ export default function EditBuildPage() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [selectedCharacter, setSelectedCharacter] = useState([]);
+  const [submitLoading, setSubmitLoading] = useState(false);
   const [search, setSearch] = useState("");
 
   const navigate = useNavigate();
@@ -56,6 +57,7 @@ export default function EditBuildPage() {
 
   const handleSubmit = async (e) => {
     try {
+      setSubmitLoading(true);
       const { data } = await axios.put(
         `${url}/builds/${id}`,
         {
@@ -74,6 +76,8 @@ export default function EditBuildPage() {
       navigate("/builds");
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to create build");
+    } finally {
+      setSubmitLoading(false);
     }
   };
 
@@ -98,6 +102,7 @@ export default function EditBuildPage() {
       onBack={() => navigate("/builds")}
       title={"Edit Build"}
       submitLabel={"Save Changes"}
+      submitLoading={submitLoading}
     />
   );
 }

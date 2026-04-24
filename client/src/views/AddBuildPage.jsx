@@ -16,6 +16,7 @@ export default function AddBuildPage() {
   const [selectedCharacter, setSelectedCharacter] = useState([]);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [submitLoading, setSubmitLoading] = useState(false);
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
 
@@ -35,6 +36,7 @@ export default function AddBuildPage() {
 
   const handleSubmit = async (e) => {
     try {
+      setSubmitLoading(true);
       const { data } = await axios.post(
         `${url}/builds`,
         {
@@ -53,6 +55,8 @@ export default function AddBuildPage() {
       navigate("/builds");
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to create build");
+    } finally {
+      setSubmitLoading(false);
     }
   };
 
@@ -74,6 +78,7 @@ export default function AddBuildPage() {
       setDescription={setDescription}
       handleSubmit={handleSubmit}
       onBack={() => navigate("/builds")}
+      submitLoading={submitLoading}
     />
   );
 }

@@ -15,6 +15,7 @@ export default function BuildFormPage({
   onBack,
   title = "New Build",
   submitLabel = "Create Build",
+  submitLoading,
 }) {
   const navigate = useNavigate();
   return (
@@ -77,8 +78,16 @@ export default function BuildFormPage({
               </div>
             </div>
 
-            <button onClick={handleSubmit} className="btn-gold">
-              {submitLabel}
+            <button
+              onClick={handleSubmit}
+              className="btn-gold"
+              disabled={submitLoading}
+            >
+              {submitLoading ? (
+                <span className="loading loading-spinner loading-sm"></span>
+              ) : (
+                submitLabel
+              )}
             </button>
             <button onClick={onBack} className="btn-outline">
               Back
