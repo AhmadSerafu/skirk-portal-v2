@@ -13,12 +13,14 @@ import EditBuildPage from "./views/EditBuildPage";
 import AIAnalyzerPage from "./views/AIAnalyzerPage";
 import GuestRoute from "./layouts/GuestRoute";
 import HomePage from "./views/HomePage";
+import ScrollToTop from "./components/ScrollToTop";
 
 function App() {
   return (
     <>
       <Navbar />
       <ToastContainer theme="dark" position="top-right" />
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/characters" element={<CharactersPage />} />
