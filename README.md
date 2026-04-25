@@ -10,8 +10,8 @@
 
 ## 🔗 Links
 
-- **Client**: [skirk.my.id](https://skirk.my.id)
-- **Server**: [api.skirk.my.id](https://api.skirk.my.id)
+- **Client**: https://skirk-portal-v2.vercel.app/
+- **Server**: https://skirk-portal-v2-api.up.railway.app/characters/skirk
 
 ---
 
@@ -40,7 +40,8 @@ Skirk Portal is a full-stack web application themed around Genshin Impact. It al
 - **Database**: PostgreSQL + Sequelize ORM
 - **Auth**: JWT + bcryptjs + Google OAuth
 - **AI**: Gemini (`gemini-3-flash-preview`) via `@google/genai`
-- **3rd Party API**: [genshin.jmp.blue](https://genshin.jmp.blue)
+- **Character Data**: [`genshin-db`](https://www.npmjs.com/package/genshin-db) (local npm package, no external API)
+- **Image CDN**: [Enka Network](https://enka.network) (character images served from `enka.network/ui`)
 - **Testing**: Jest + Supertest (coverage 95%+)
 
 ### Client
@@ -60,13 +61,21 @@ Skirk Portal is a full-stack web application themed around Genshin Impact. It al
 
 ![Homepage](docs/screenshots/homepage.png)
 
-### Login
+### Characters
 
-![Login](docs/screenshots/login.png)
+![Characters](docs/screenshots/characters.png)
 
 ### Character Detail
 
 ![Character Detail](docs/screenshots/character-detail.png)
+
+### Login
+
+![Login](docs/screenshots/login.png)
+
+### Register
+
+![Register](docs/screenshots/register.png)
 
 ### My Builds
 
@@ -83,6 +92,10 @@ Skirk Portal is a full-stack web application themed around Genshin Impact. It al
 ### AI Analyzer
 
 ![AI Analyzer](docs/screenshots/ai-analyzer.png)
+
+### AI Analyzing
+
+![AI Analyzing](docs/screenshots/ai-analyzing.png)
 
 ### AI Result
 
@@ -113,14 +126,12 @@ npm install
 Create `.env` file:
 
 ```env
-PORT=3000
-DB_USER=postgres
-DB_PASSWORD=yourpassword
-DB_NAME=skirk_portal_dev
 JWT_SECRET_KEY=yoursecretkey
 GOOGLE_CLIENT_ID=yourgoogleclientid
 GEMINI_API_KEY=yourgeminikey
 ```
+
+> **Note:** Database is configured via `config/config.json`. Development uses `skirk_portal_v2_dev` with user `postgres`. Production uses the `DATABASE_URL` environment variable.
 
 Run migration and start:
 
@@ -140,7 +151,7 @@ npm install
 Create `.env` file:
 
 ```env
-VITE_BASE_URL=http://localhost:3000
+VITE_API_URL=http://localhost:3000
 VITE_GOOGLE_CLIENT_ID=yourgoogleclientid
 ```
 
@@ -191,6 +202,7 @@ ip-AhmadSerafu-skirk-portal/
     ├── src/
     │   ├── app/
     │   ├── components/
+    │   ├── constants/
     │   ├── features/
     │   ├── layouts/
     │   └── views/

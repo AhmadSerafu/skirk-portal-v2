@@ -2,7 +2,7 @@
 
 ## Base URL
 
-`https://api.skirk.my.id`
+`https://skirk-portal-v2-api.up.railway.app/characters/skirk`
 
 ---
 
@@ -74,49 +74,37 @@ _Response (201 - Created)_
 _Response (400 - Bad Request)_
 
 ```json
-{
-  "message": "Email is required"
-}
+{ "message": "Email is required" }
 ```
 
 OR
 
 ```json
-{
-  "message": "Email cannot be empty"
-}
+{ "message": "Email cannot be empty" }
 ```
 
 OR
 
 ```json
-{
-  "message": "Please provide a valid email address"
-}
+{ "message": "Please provide a valid email address" }
 ```
 
 OR
 
 ```json
-{
-  "message": "Password is required"
-}
+{ "message": "Password is required" }
 ```
 
 OR
 
 ```json
-{
-  "message": "Password cannot be empty"
-}
+{ "message": "Password cannot be empty" }
 ```
 
 OR
 
 ```json
-{
-  "message": "email must be unique"
-}
+{ "message": "email must be unique" }
 ```
 
 ---
@@ -149,25 +137,19 @@ _Response (200 - OK)_
 _Response (400 - Bad Request)_
 
 ```json
-{
-  "message": "Email is required"
-}
+{ "message": "Email is required" }
 ```
 
 OR
 
 ```json
-{
-  "message": "Password is required"
-}
+{ "message": "Password is required" }
 ```
 
 _Response (401 - Unauthorized)_
 
 ```json
-{
-  "message": "Invalid Email/Password"
-}
+{ "message": "Invalid Email/Password" }
 ```
 
 ---
@@ -199,17 +181,13 @@ _Response (200 - OK)_
 _Response (400 - Bad Request)_
 
 ```json
-{
-  "message": "Invalid Token"
-}
+{ "message": "Invalid Token" }
 ```
 
 OR
 
 ```json
-{
-  "message": "Email is not verified"
-}
+{ "message": "Email is not verified" }
 ```
 
 ---
@@ -220,8 +198,9 @@ OR
 
 Description:
 
-- Get all Genshin Impact characters
-- Support filter by vision, weapon, nation, and rarity
+- Get all Genshin Impact characters from the local `genshin-db` package
+- Supports filter by vision, weapon, nation, and rarity
+- Character images are served from Enka Network
 
 Request:
 
@@ -229,9 +208,9 @@ Request:
 
 | Param  | Type    | Description              | Example       |
 | ------ | ------- | ------------------------ | ------------- |
-| vision | string  | Filter by element        | ?vision=pyro  |
-| weapon | string  | Filter by weapon type    | ?weapon=sword |
-| nation | string  | Filter by nation         | ?nation=liyue |
+| vision | string  | Filter by element        | ?vision=Cryo  |
+| weapon | string  | Filter by weapon type    | ?weapon=Sword |
+| nation | string  | Filter by nation         | ?nation=Liyue |
 | rarity | integer | Filter by rarity (4 / 5) | ?rarity=5     |
 
 _Response (200 - OK)_
@@ -239,15 +218,16 @@ _Response (200 - OK)_
 ```json
 [
   {
-    "id": "hu-tao",
-    "name": "Hu Tao",
-    "vision": "Pyro",
-    "weapon": "Polearm",
-    "nation": "Liyue",
+    "id": 10000114,
+    "name": "Skirk",
+    "vision": "Cryo",
+    "weapon": "Sword",
+    "nation": null,
     "rarity": 5,
-    "constellation": "Papilio Charontis",
-    "birthday": "07/15",
-    "description": "..."
+    "images": {
+      "icon": "https://enka.network/ui/UI_AvatarIcon_SkirkNew.png",
+      "splash": "https://enka.network/ui/UI_Gacha_AvatarImg_SkirkNew.png"
+    }
   },
   "..."
 ]
@@ -259,7 +239,9 @@ _Response (200 - OK)_
 
 Description:
 
-- Get character detail by id
+- Get character detail by name
+- `:id` is the character's name, **case-sensitive**, exactly as returned from `GET /characters`
+- Example: `/characters/Skirk`, `/characters/Hu Tao`
 
 Request:
 
@@ -267,7 +249,7 @@ Request:
 
 ```json
 {
-  "id": "string (required) e.g. hu-tao"
+  "id": "string (required) — e.g. \"Skirk\", \"Hu Tao\""
 }
 ```
 
@@ -275,27 +257,58 @@ _Response (200 - OK)_
 
 ```json
 {
-  "id": "hu-tao",
-  "name": "Hu Tao",
-  "vision": "Pyro",
-  "weapon": "Polearm",
-  "nation": "Liyue",
+  "id": 10000114,
+  "name": "Skirk",
+  "title": "Void Star",
+  "description": "A visitor who once appeared in an Abyssal rift and the Primordial Sea...",
   "rarity": 5,
-  "constellation": "Papilio Charontis",
-  "birthday": "07/15",
-  "description": "...",
-  "skillTalents": ["..."],
-  "passiveTalents": ["..."],
-  "constellations": ["..."]
+  "vision": "Cryo",
+  "weapon": "Sword",
+  "nation": null,
+  "affiliation": "Cosmic Calamity",
+  "birthday": "November 5",
+  "constellation": "Crystallina",
+  "cv": {
+    "english": "Cat Protano",
+    "chinese": "谢莹",
+    "japanese": "能登麻美子",
+    "korean": "Seo Da-hye"
+  },
+  "skillTalents": [
+    {
+      "name": "Havoc: Sunder",
+      "description": "Normal Attack\nPerforms up to 5 consecutive attacks...",
+      "attributes": { "labels": ["..."], "parameters": {} }
+    },
+    "..."
+  ],
+  "passiveTalents": [
+    {
+      "name": "Reason Beyond Reason",
+      "description": "When nearby party members trigger Frozen, Superconduct..."
+    },
+    "..."
+  ],
+  "constellations": [
+    {
+      "name": "Far to Fall",
+      "description": "Enhances the effects of the Ascension Talent Reason Beyond Reason..."
+    },
+    "..."
+  ],
+  "images": {
+    "icon": "https://enka.network/ui/UI_AvatarIcon_SkirkNew.png",
+    "portrait": null,
+    "card": "https://enka.network/ui/UI_AvatarIcon_SkirkNew_Card.png",
+    "splash": "https://enka.network/ui/UI_Gacha_AvatarImg_SkirkNew.png"
+  }
 }
 ```
 
 _Response (404 - Not Found)_
 
 ```json
-{
-  "message": "Character not found"
-}
+{ "message": "Character not found" }
 ```
 
 ---
@@ -307,6 +320,7 @@ _Response (404 - Not Found)_
 Description:
 
 - Get all builds belonging to the logged in traveler
+- Each `BuildCharacter` entry is enriched with `icon`, `vision`, and `splash` from Enka Network
 
 Request:
 
@@ -324,8 +338,8 @@ _Response (200 - OK)_
 [
   {
     "id": 1,
-    "name": "Hu Tao Vaporize",
-    "description": "Strong vaporize comp",
+    "name": "Cryo Freeze Comp",
+    "description": "High damage freeze team",
     "travelerId": 1,
     "createdAt": "2026-04-20T00:00:00.000Z",
     "updatedAt": "2026-04-20T00:00:00.000Z",
@@ -333,8 +347,11 @@ _Response (200 - OK)_
       {
         "id": 1,
         "buildId": 1,
-        "characterId": "hu-tao",
-        "slot": 1
+        "characterId": "Skirk",
+        "slot": 1,
+        "icon": "https://enka.network/ui/UI_AvatarIcon_SkirkNew.png",
+        "vision": "Cryo",
+        "splash": "https://enka.network/ui/UI_Gacha_AvatarImg_SkirkNew.png"
       },
       "..."
     ]
@@ -350,6 +367,7 @@ _Response (200 - OK)_
 Description:
 
 - Create a new build with minimum 1 and maximum 4 characters
+- `characters` array must contain character names exactly as returned from `GET /characters`
 
 Request:
 
@@ -367,7 +385,7 @@ Request:
 {
   "name": "string",
   "description": "string",
-  "characters": ["string (character id)", "..."]
+  "characters": ["Skirk", "Furina", "Layla", "Zhongli"]
 }
 ```
 
@@ -376,8 +394,8 @@ _Response (201 - Created)_
 ```json
 {
   "id": 1,
-  "name": "Hu Tao Vaporize",
-  "description": "Strong vaporize comp",
+  "name": "Cryo Freeze Comp",
+  "description": "High damage freeze team",
   "travelerId": 1,
   "createdAt": "2026-04-20T00:00:00.000Z",
   "updatedAt": "2026-04-20T00:00:00.000Z",
@@ -385,8 +403,11 @@ _Response (201 - Created)_
     {
       "id": 1,
       "buildId": 1,
-      "characterId": "hu-tao",
-      "slot": 1
+      "characterId": "Skirk",
+      "slot": 1,
+      "icon": "https://enka.network/ui/UI_AvatarIcon_SkirkNew.png",
+      "vision": "Cryo",
+      "splash": "https://enka.network/ui/UI_Gacha_AvatarImg_SkirkNew.png"
     },
     "..."
   ]
@@ -396,25 +417,19 @@ _Response (201 - Created)_
 _Response (400 - Bad Request)_
 
 ```json
-{
-  "message": "Build name is required"
-}
+{ "message": "Build name is required" }
 ```
 
 OR
 
 ```json
-{
-  "message": "At least 1 character is required"
-}
+{ "message": "At least 1 character is required" }
 ```
 
 OR
 
 ```json
-{
-  "message": "Maximum 4 characters per build"
-}
+{ "message": "Maximum 4 characters per build" }
 ```
 
 ---
@@ -449,8 +464,8 @@ _Response (200 - OK)_
 ```json
 {
   "id": 1,
-  "name": "Hu Tao Vaporize",
-  "description": "Strong vaporize comp",
+  "name": "Cryo Freeze Comp",
+  "description": "High damage freeze team",
   "travelerId": 1,
   "createdAt": "2026-04-20T00:00:00.000Z",
   "updatedAt": "2026-04-20T00:00:00.000Z",
@@ -458,8 +473,11 @@ _Response (200 - OK)_
     {
       "id": 1,
       "buildId": 1,
-      "characterId": "hu-tao",
-      "slot": 1
+      "characterId": "Skirk",
+      "slot": 1,
+      "icon": "https://enka.network/ui/UI_AvatarIcon_SkirkNew.png",
+      "vision": "Cryo",
+      "splash": "https://enka.network/ui/UI_Gacha_AvatarImg_SkirkNew.png"
     },
     "..."
   ]
@@ -469,17 +487,13 @@ _Response (200 - OK)_
 _Response (404 - Not Found)_
 
 ```json
-{
-  "message": "Build not found"
-}
+{ "message": "Build not found" }
 ```
 
 _Response (403 - Forbidden)_
 
 ```json
-{
-  "message": "You are not authorized to access this build"
-}
+{ "message": "You are not authorized to access this build" }
 ```
 
 ---
@@ -490,6 +504,7 @@ Description:
 
 - Update build by id
 - Only accessible by the owner of the build
+- Replaces all existing characters with the new `characters` array
 
 Request:
 
@@ -515,7 +530,7 @@ Request:
 {
   "name": "string",
   "description": "string",
-  "characters": ["string (character id)", "..."]
+  "characters": ["Skirk", "Furina", "Layla", "Zhongli"]
 }
 ```
 
@@ -524,17 +539,20 @@ _Response (200 - OK)_
 ```json
 {
   "id": 1,
-  "name": "Hu Tao Vaporize Updated",
+  "name": "Cryo Freeze Comp Updated",
   "description": "Updated comp",
   "travelerId": 1,
   "createdAt": "2026-04-20T00:00:00.000Z",
   "updatedAt": "2026-04-20T00:00:00.000Z",
   "BuildCharacters": [
     {
-      "id": 1,
+      "id": 5,
       "buildId": 1,
-      "characterId": "hu-tao",
-      "slot": 1
+      "characterId": "Skirk",
+      "slot": 1,
+      "icon": "https://enka.network/ui/UI_AvatarIcon_SkirkNew.png",
+      "vision": "Cryo",
+      "splash": "https://enka.network/ui/UI_Gacha_AvatarImg_SkirkNew.png"
     },
     "..."
   ]
@@ -544,33 +562,25 @@ _Response (200 - OK)_
 _Response (400 - Bad Request)_
 
 ```json
-{
-  "message": "At least 1 character is required"
-}
+{ "message": "At least 1 character is required" }
 ```
 
 OR
 
 ```json
-{
-  "message": "Maximum 4 characters per build"
-}
+{ "message": "Maximum 4 characters per build" }
 ```
 
 _Response (403 - Forbidden)_
 
 ```json
-{
-  "message": "You are not authorized to access this build"
-}
+{ "message": "You are not authorized to access this build" }
 ```
 
 _Response (404 - Not Found)_
 
 ```json
-{
-  "message": "Build not found"
-}
+{ "message": "Build not found" }
 ```
 
 ---
@@ -603,25 +613,19 @@ Request:
 _Response (200 - OK)_
 
 ```json
-{
-  "message": "Build deleted successfully"
-}
+{ "message": "Build deleted successfully" }
 ```
 
 _Response (403 - Forbidden)_
 
 ```json
-{
-  "message": "You are not authorized to access this build"
-}
+{ "message": "You are not authorized to access this build" }
 ```
 
 _Response (404 - Not Found)_
 
 ```json
-{
-  "message": "Build not found"
-}
+{ "message": "Build not found" }
 ```
 
 ---
@@ -632,8 +636,10 @@ _Response (404 - Not Found)_
 
 Description:
 
-- Analyze a team composition using Gemini AI
+- Analyze a team composition using Gemini AI (`gemini-3-flash-preview`)
+- Characters are enriched with element data from `genshin-db` before being sent to the AI
 - Returns team name, rating, synopsis, elemental reactions, strengths, weaknesses, and playstyle
+- `characters` array must contain character names exactly as returned from `GET /characters`
 
 Request:
 
@@ -649,7 +655,7 @@ Request:
 
 ```json
 {
-  "characters": ["string (character id)", "..."]
+  "characters": ["Skirk", "Furina", "Layla", "Zhongli"]
 }
 ```
 
@@ -657,37 +663,33 @@ _Response (200 - OK)_
 
 ```json
 {
-  "teamName": "Vaporize Overlord",
+  "teamName": "Frozen Void",
   "overallRating": "S",
-  "synopsis": "A powerful vaporize team centered around Hu Tao...",
-  "elementalReactions": ["Vaporize", "Frozen"],
+  "synopsis": "A powerful freeze team centered around Skirk's extreme Cryo damage output...",
+  "elementalReactions": ["Frozen", "Shatter", "Crystallize"],
   "strengths": [
-    "High single target damage",
-    "Strong sustain",
-    "Flexible rotations"
+    "Extremely high Cryo DPS from Skirk",
+    "Consistent Frozen uptime via Furina Hydro application",
+    "Strong shield coverage from Zhongli"
   ],
   "weaknesses": [
-    "Requires precise HP management",
-    "Struggles against Hydro abyss"
+    "Heavily reliant on Cryo/Hydro synergy",
+    "Struggles against Cryo-immune enemies"
   ],
-  "playstyle": "Rotate supports to apply Hydro, then switch to Hu Tao for massive vaporize damage..."
+  "playstyle": "Rotate supports to apply Hydro and shields, then switch to Skirk for massive Cryo burst damage..."
 }
 ```
 
 _Response (400 - Bad Request)_
 
 ```json
-{
-  "message": "Characters is required"
-}
+{ "message": "Characters is required" }
 ```
 
 OR
 
 ```json
-{
-  "message": "Maximum 4 characters per team"
-}
+{ "message": "Maximum 4 characters per team" }
 ```
 
 ---
@@ -697,23 +699,17 @@ OR
 _Response (401 - Unauthorized)_
 
 ```json
-{
-  "message": "Invalid Token"
-}
+{ "message": "Invalid Token" }
 ```
 
 _Response (403 - Forbidden)_
 
 ```json
-{
-  "message": "You are not authorized to access this build"
-}
+{ "message": "You are not authorized to access this build" }
 ```
 
 _Response (500 - Internal Server Error)_
 
 ```json
-{
-  "message": "Internal Server Error"
-}
+{ "message": "Internal Server Error" }
 ```
