@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node --max-old-space-size=2048 bin/www",
+    "start": "node bin/www",
     "test": "jest --verbose --detectOpenHandles --forceExit",
     "test:coverage": "jest --verbose --detectOpenHandles --forceExit --coverage",
     "dev": "npx nodemon bin/www"
