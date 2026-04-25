@@ -103,9 +103,9 @@ Skirk Portal is a full-stack web application themed around Genshin Impact. It al
 
 ### Mobile View
 
-| Homepage                                                 | Characters                                                   | Login                                              |
-| -------------------------------------------------------- | ------------------------------------------------------------ | -------------------------------------------------- |
-| ![Mobile Homepage](docs/screenshots/mobile-homepage.png) | ![Mobile Characters](docs/screenshots/mobile-characters.png) | ![Mobile Login](docs/screenshots/mobile-login.png) |
+| Homepage                                                      | Characters                                                      | Login                                                      |
+| ------------------------------------------------------------- | --------------------------------------------------------------- | ---------------------------------------------------------- |
+| <img src="docs/screenshots/mobile-homepage.png" width="330"/> | <img src="docs/screenshots/mobile-characters.png" width="330"/> | <img src="docs/screenshots/mobile-login.png" width="330"/> |
 
 ---
 
