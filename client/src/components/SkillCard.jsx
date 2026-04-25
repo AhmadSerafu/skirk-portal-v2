@@ -13,7 +13,7 @@ const formatValue = (template, parameters, level) => {
 };
 
 export default function SkillCard({ skill }) {
-  const [talentLevel, setTalentLevel] = useState(1);
+  const [talentLevel, setTalentLevel] = useState(10);
 
   const hasScaling =
     skill.attributes?.labels?.length > 0 &&

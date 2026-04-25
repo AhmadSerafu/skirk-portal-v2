@@ -241,7 +241,7 @@ export default function CharacterDetailPage() {
             <button
               key={tid}
               onClick={() => setActiveTab(tid)}
-              className={`flex items-center gap-2 px-4 py-2.5 font-cinzel text-xs tracking-widest uppercase transition-all shrink-0 border-b-2 -mb-px ${
+              className={`cursor-pointer flex items-center gap-2 px-4 py-2.5 font-cinzel text-xs tracking-widest uppercase transition-all shrink-0 border-b-2 -mb-px ${
                 activeTab === tid
                   ? "border-gold text-gold"
                   : "border-transparent text-parchment-dim hover:text-parchment"
