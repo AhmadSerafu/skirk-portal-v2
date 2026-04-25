@@ -6,7 +6,12 @@ import PassiveCard from "../components/PassiveCard";
 import ConstellationCard from "../components/ConstellationCard";
 import SkillCard from "../components/SkillCard";
 import { IoArrowBack } from "react-icons/io5";
-import { GiSwordSpin, GiPowerLightning, GiBookmarklet } from "react-icons/gi";
+import {
+  GiSwordSpin,
+  GiPowerLightning,
+  GiBookmarklet,
+  GiScrollQuill,
+} from "react-icons/gi";
 
 // ─── Element badge color ────────────────────────────────────────────────────
 const ELEMENT_COLORS = {
@@ -26,6 +31,7 @@ const RARITY_COLORS = {
 
 // ─── Tabs config ─────────────────────────────────────────────────────────────
 const TABS = [
+  { id: "about", label: "About", icon: GiScrollQuill },
   { id: "skills", label: "Skills", icon: GiSwordSpin },
   { id: "passive", label: "Passives", icon: GiBookmarklet },
   { id: "constellations", label: "Constellations", icon: GiPowerLightning },
@@ -105,7 +111,7 @@ export default function CharacterDetailPage() {
             src={character.images.splash}
             alt=""
             className="absolute inset-0 w-full h-full object-cover object-center scale-105"
-            style={{ filter: "blur(2px) brightness(0.55)" }}
+            style={{ filter: "blur(0.5px) brightness(0.6)" }}
           />
         )}
 
@@ -114,7 +120,7 @@ export default function CharacterDetailPage() {
         <div className="absolute inset-0 bg-gradient-to-t from-void-900 via-transparent to-void-900/50" />
 
         {/* Content */}
-        <div className="relative z-10 h-full max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-end gap-8 pb-10 pt-8">
+        <div className="relative z-10 h-full max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-end items-start md:items-end gap-8 pb-10 pt-8">
           {/* ── Left: portrait image ──────────────────────────────── */}
           <div className="hidden md:block shrink-0">
             <div
@@ -135,7 +141,7 @@ export default function CharacterDetailPage() {
           </div>
 
           {/* ── Center: character info ────────────────────────────── */}
-          <div className="flex-1 flex flex-col gap-3">
+          <div className="md:flex-1 flex flex-col gap-3">
             {/* Nation · Weapon · Element */}
             <p className="text-parchment-dim text-xs font-cinzel tracking-widest uppercase">
               {[character.nation, character.weapon, character.vision]
@@ -168,7 +174,7 @@ export default function CharacterDetailPage() {
             </div>
 
             {/* Quick facts */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-8 gap-y-1.5 mt-1">
+            <div className="flex flex-wrap gap-x-6 gap-y-1.5 mt-1">
               {character.constellation && (
                 <div>
                   <p className="text-parchment-dim text-[10px] uppercase tracking-widest font-cinzel">
@@ -200,13 +206,6 @@ export default function CharacterDetailPage() {
                 </div>
               )}
             </div>
-
-            {/* Description */}
-            {character.description && (
-              <p className="text-parchment-dim text-sm leading-relaxed max-w-xl mt-1">
-                {character.description.replace(/\*\*/g, "")}
-              </p>
-            )}
           </div>
 
           {/* ── Right: Voice Actors ───────────────────────────────── */}
@@ -235,7 +234,7 @@ export default function CharacterDetailPage() {
       </div>
 
       {/* ── TABS + CONTENT ───────────────────────────────────────────────── */}
-      <div className="max-w-6xl mx-auto px-6 mt-8">
+      <div className="max-w-6xl mx-auto px-6 mt-6">
         {/* Tab bar */}
         <div className="flex gap-1 border-b border-void-600 mb-6 overflow-x-auto no-scrollbar">
           {TABS.map(({ id: tid, label, icon: Icon }) => (
@@ -253,6 +252,37 @@ export default function CharacterDetailPage() {
             </button>
           ))}
         </div>
+
+        {/* ── About ────────────────────────────────────────────────── */}
+        {activeTab === "about" && (
+          <div className="flex flex-col gap-6">
+            {character.description && (
+              <p className="text-parchment-dim text-sm leading-relaxed max-w-2xl">
+                {character.description.replace(/\*\*/g, "")}
+              </p>
+            )}
+
+            {character.cv && Object.keys(character.cv).length > 0 && (
+              <div className="bg-void-950/60 border border-void-600/50 rounded-xl p-4 backdrop-blur-sm w-fit">
+                <p className="font-cinzel text-xs text-gold uppercase tracking-widest mb-3">
+                  Voice Actors
+                </p>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-8 gap-y-3">
+                  {Object.entries(character.cv).map(([lang, name]) => (
+                    <div key={lang}>
+                      <p className="text-parchment-dim text-[10px] uppercase tracking-widest">
+                        {lang}
+                      </p>
+                      <p className="text-parchment text-sm font-semibold leading-tight">
+                        {name}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* ── Skills ───────────────────────────────────────────────── */}
         {activeTab === "skills" && (
