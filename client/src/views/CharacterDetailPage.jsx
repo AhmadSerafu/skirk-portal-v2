@@ -110,7 +110,7 @@ export default function CharacterDetailPage() {
           <img
             src={character.images.splash}
             alt=""
-            className="absolute inset-0 w-full h-full object-cover object-center scale-105"
+            className="absolute inset-0 w-full h-full object-cover object-top scale-105"
             style={{ filter: "blur(0.5px) brightness(0.6)" }}
           />
         )}
