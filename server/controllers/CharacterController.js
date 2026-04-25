@@ -13,6 +13,8 @@ class CharacterController {
         matchCategories: true,
       });
 
+      console.log(genshindb.characters("Skirk"));
+
       let characters = charNames
         .map((name) => {
           const character = genshindb.characters(name);
@@ -33,7 +35,8 @@ class CharacterController {
             },
           };
         })
-        .filter(Boolean);
+        .filter(Boolean)
+        .sort((charA, charB) => charB.id - charA.id);
 
       if (vision)
         characters = characters.filter(
