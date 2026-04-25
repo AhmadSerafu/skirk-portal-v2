@@ -46,7 +46,7 @@ export default function CharacterCard({ character }) {
           <div className="absolute inset-0 bg-gradient-to-t from-void-950 via-void-950/30 to-transparent pointer-events-none" />
 
           {/* Rarity stars — top left corner */}
-          <div className="absolute top-2 left-2">
+          <div className="absolute top-1 left-1.5">
             <span
               className={`text-xs tracking-tight font-bold ${character.rarity === 5 ? "text-gold drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]" : "text-purple-400 drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]"}`}
             >
