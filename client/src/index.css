@@ -1,5 +1,7 @@
 @import "tailwindcss";
-@plugin "daisyui";
+@plugin "daisyui" {
+  themes: dim --default;
+}
 
 @theme {
   --color-gold: #c9a84c;
@@ -16,6 +18,11 @@
 
 * {
   box-sizing: border-box;
+}
+
+html {
+  color-scheme: dark;
+  forced-color-adjust: none;
 }
 
 body {
