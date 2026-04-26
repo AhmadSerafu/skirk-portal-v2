@@ -159,12 +159,7 @@ export default function CharacterDetailPage() {
               style={{ width: 180, height: 240 }}
             >
               <img
-                src={
-                  character.images?.portrait ||
-                  character.images?.icon ||
-                  character.images?.card ||
-                  ""
-                }
+                src={character.images?.icon || character.images?.card || ""}
                 alt={character.name}
                 className="w-full h-full object-cover object-top"
               />
