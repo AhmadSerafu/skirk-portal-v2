@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
-import { url } from "../constants/url";
+import { url, materialIcon } from "../constants/url";
 import PassiveCard from "../components/PassiveCard";
 import ConstellationCard from "../components/ConstellationCard";
 import SkillCard from "../components/SkillCard";
@@ -13,6 +13,7 @@ import {
   GiScrollQuill,
   GiSpeedometer,
 } from "react-icons/gi";
+import StatsCard from "../components/StatsCard";
 
 // ─── Element badge color ────────────────────────────────────────────────────
 const ELEMENT_COLORS = {
@@ -32,7 +33,7 @@ const RARITY_COLORS = {
 
 // ─── Tabs config ─────────────────────────────────────────────────────────────
 const TABS = [
-  { id: "stats", label: "Stats", icon: GiSpeedometer },
+  { id: "stats", label: "Stats & Ascension", icon: GiSpeedometer },
   { id: "skills", label: "Skills", icon: GiSwordSpin },
   { id: "passive", label: "Passives", icon: GiBookmarklet },
   { id: "constellations", label: "Constellations", icon: GiPowerLightning },
@@ -354,82 +355,16 @@ export default function CharacterDetailPage() {
           </div>
         )}
 
-        {/* ── Stats ────────────────────────────────────────────────── */}
+        {/* ── Stats & Ascension ───────────────────────────────── */}
         {activeTab === "stats" && (
-          <div>
-            {statsLoading ? (
-              <div className="flex justify-center py-12">
-                <span className="loading loading-spinner text-gold w-10 h-10" />
-              </div>
-            ) : statsData ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Slider card */}
-                <div className="card p-5 flex flex-col gap-3">
-                  <p className="font-cinzel text-sm font-semibold text-parchment mb-1">
-                    Base Stats Scaling
-                  </p>
-                  <p className="text-xs text-gold mb-2">
-                    {statsData.substatType || "Substat"}
-                  </p>
-                  <div className="border-t border-void-600 pt-3 flex flex-col gap-3">
-                    <div className="flex items-center gap-3">
-                      <span className="form-label shrink-0">Level</span>
-                      <input
-                        type="range"
-                        min={1}
-                        max={100}
-                        value={statLevel}
-                        onChange={(e) => setStatLevel(Number(e.target.value))}
-                        className="flex-1 accent-gold cursor-pointer"
-                      />
-                      <span className="font-cinzel text-gold font-bold text-sm w-8 text-center shrink-0">
-                        {statLevel}
-                      </span>
-                    </div>
-
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="text-parchment-dim">
-                        Ascension Phase
-                      </span>
-                      <span className="text-parchment font-semibold">
-                        {currentStats.ascension}
-                      </span>
-                    </div>
-
-                    <div className="border-t border-void-600/50 my-1" />
-
-                    {currentStats && (
-                      <div className="flex flex-col gap-1.5">
-                        {[
-                          { key: "hp", label: "Base HP" },
-                          { key: "attack", label: "Base ATK" },
-                          { key: "defense", label: "Base DEF" },
-                          {
-                            key: "specialized",
-                            label: statsData.substatType || "Substat",
-                          },
-                        ].map(({ key, label }) => (
-                          <div
-                            key={key}
-                            className="flex flex-col sm:flex-row sm:justify-between text-xs gap-0.5"
-                          >
-                            <span className="text-parchment-dim">{label}</span>
-                            <span className="text-parchment font-semibold">
-                              {formatStat(key, currentStats[key])}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <p className="text-parchment-dim text-sm font-cinzel">
-                Failed to load stats.
-              </p>
-            )}
-          </div>
+          <StatsCard
+            statsData={statsData}
+            statsLoading={statsLoading}
+            statLevel={statLevel}
+            setStatLevel={setStatLevel}
+            currentStats={currentStats}
+            costs={character.costs}
+          />
         )}
       </div>
     </div>

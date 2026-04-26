@@ -13,6 +13,9 @@ class CharacterController {
         matchCategories: true,
       });
 
+      const char = genshindb.characters("skirk");
+      console.log(char.costs);
+
       let characters = charNames
         .map((name) => {
           const character = genshindb.characters(name);
@@ -84,6 +87,7 @@ class CharacterController {
         birthday: character.birthday,
         constellation: character.constellation,
         cv: character.cv,
+        costs: character.costs || null,
         skillTalents: talents
           ? [talents.combat1, talents.combat2, talents.combat3].filter(Boolean)
           : [],
