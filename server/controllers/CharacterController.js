@@ -13,8 +13,6 @@ class CharacterController {
         matchCategories: true,
       });
 
-      console.log(genshindb.characters("Skirk"));
-
       let characters = charNames
         .map((name) => {
           const character = genshindb.characters(name);
@@ -113,6 +111,28 @@ class CharacterController {
           card: enkaUrl(character.images.filename_iconCard) || null,
           splash: enkaUrl(character.images.filename_gachaSplash) || null,
         },
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static getCharacterStats(req, res, next) {
+    try {
+      const { id } = req.params;
+
+      const character = genshindb.characters(String(id));
+      if (!character)
+        throw { name: "NotFound", message: "Character not found" };
+
+      const stats = {};
+      for (let level = 1; level <= 100; level++) {
+        stats[level] = character.stats(level);
+      }
+
+      res.status(200).json({
+        substatType: character.substatText,
+        stats,
       });
     } catch (error) {
       next(error);

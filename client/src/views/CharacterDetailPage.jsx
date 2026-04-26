@@ -11,6 +11,7 @@ import {
   GiPowerLightning,
   GiBookmarklet,
   GiScrollQuill,
+  GiSpeedometer,
 } from "react-icons/gi";
 
 // ─── Element badge color ────────────────────────────────────────────────────
@@ -31,10 +32,11 @@ const RARITY_COLORS = {
 
 // ─── Tabs config ─────────────────────────────────────────────────────────────
 const TABS = [
-  { id: "about", label: "About", icon: GiScrollQuill },
+  { id: "stats", label: "Stats", icon: GiSpeedometer },
   { id: "skills", label: "Skills", icon: GiSwordSpin },
   { id: "passive", label: "Passives", icon: GiBookmarklet },
   { id: "constellations", label: "Constellations", icon: GiPowerLightning },
+  { id: "about", label: "About", icon: GiScrollQuill },
 ];
 
 const SKILL_UNLOCK = ["Normal Attack", "Elemental Skill", "Elemental Burst"];
@@ -44,12 +46,22 @@ const PASSIVE_UNLOCK = [
   "Utility Passive",
 ];
 
+// ─── Stat formatter ───────────────────────────────────────────────────────────
+const formatStat = (key, value) => {
+  if (key === "specialized") return `${(value * 100).toFixed(1)}%`;
+  return Math.floor(value).toLocaleString();
+};
+
 // ─── Main page ────────────────────────────────────────────────────────────────
 export default function CharacterDetailPage() {
   const { id } = useParams();
   const [character, setCharacter] = useState({});
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("skills");
+
+  const [statsData, setStatsData] = useState(null);
+  const [statsLoading, setStatsLoading] = useState(false);
+  const [statLevel, setStatLevel] = useState(90);
 
   useEffect(() => {
     const fetchCharacter = async () => {
@@ -65,6 +77,22 @@ export default function CharacterDetailPage() {
     };
     fetchCharacter();
   }, [id]);
+
+  useEffect(() => {
+    if (activeTab !== "stats" || statsData) return;
+    const fetchStats = async () => {
+      try {
+        setStatsLoading(true);
+        const { data } = await axios.get(`${url}/characters/${id}/stats`);
+        setStatsData(data);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setStatsLoading(false);
+      }
+    };
+    fetchStats();
+  }, [activeTab, id, statsData]);
 
   if (loading)
     return (
@@ -87,6 +115,8 @@ export default function CharacterDetailPage() {
         </Link>
       </div>
     );
+
+  const currentStats = statsData?.stats?.[statLevel];
 
   return (
     <div className="pt-20 pb-16">
@@ -321,6 +351,84 @@ export default function CharacterDetailPage() {
                 index={i}
               />
             ))}
+          </div>
+        )}
+
+        {/* ── Stats ────────────────────────────────────────────────── */}
+        {activeTab === "stats" && (
+          <div>
+            {statsLoading ? (
+              <div className="flex justify-center py-12">
+                <span className="loading loading-spinner text-gold w-10 h-10" />
+              </div>
+            ) : statsData ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Slider card */}
+                <div className="card p-5 flex flex-col gap-3">
+                  <p className="font-cinzel text-sm font-semibold text-parchment mb-1">
+                    Base Stats Scaling
+                  </p>
+                  <p className="text-xs text-gold mb-2">
+                    {statsData.substatType || "Substat"}
+                  </p>
+                  <div className="border-t border-void-600 pt-3 flex flex-col gap-3">
+                    <div className="flex items-center gap-3">
+                      <span className="form-label shrink-0">Level</span>
+                      <input
+                        type="range"
+                        min={1}
+                        max={100}
+                        value={statLevel}
+                        onChange={(e) => setStatLevel(Number(e.target.value))}
+                        className="flex-1 accent-gold cursor-pointer"
+                      />
+                      <span className="font-cinzel text-gold font-bold text-sm w-8 text-center shrink-0">
+                        {statLevel}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-parchment-dim">
+                        Ascension Phase
+                      </span>
+                      <span className="text-parchment font-semibold">
+                        {currentStats.ascension}
+                      </span>
+                    </div>
+
+                    <div className="border-t border-void-600/50 my-1" />
+
+                    {currentStats && (
+                      <div className="flex flex-col gap-1.5">
+                        {[
+                          { key: "hp", label: "Base HP" },
+                          { key: "attack", label: "Base ATK" },
+                          { key: "defense", label: "Base DEF" },
+                          {
+                            key: "specialized",
+                            label: statsData.substatType || "Substat",
+                          },
+                        ].map(({ key, label }) => (
+                          <div
+                            key={key}
+                            className="flex flex-col sm:flex-row sm:justify-between text-xs gap-0.5"
+                          >
+                            <span className="text-parchment-dim">{label}</span>
+                            <span className="text-parchment font-semibold">
+                              {formatStat(key, currentStats[key])}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <p className="text-parchment-dim text-sm font-cinzel">
+                Failed to load stats.
+              </p>
+            )}
           </div>
         )}
       </div>
