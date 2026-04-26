@@ -93,7 +93,7 @@ export default function BuildFormPage({
                   <div
                     key={i}
                     onClick={() => charId && toggleCharacter(charId)}
-                    className={`relative aspect-[2/5] lg:aspect-square rounded-xl overflow-hidden border-2 transition-all duration-200 ${
+                    className={`relative aspect-2/5 lg:aspect-square rounded-xl overflow-hidden border-2 transition-all duration-200 ${
                       charId
                         ? `${elemClass} cursor-pointer hover:opacity-75 shadow-lg`
                         : "border-void-600 border-dashed bg-void-950/50"
@@ -108,7 +108,7 @@ export default function BuildFormPage({
                           alt={charObj.name}
                           className="w-full h-full object-cover object-top"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-void-950/80 to-transparent" />
+                        <div className="absolute inset-0 bg-linear-to-t from-void-950/80 to-transparent" />
                         <p className="absolute bottom-1 left-0 right-0 text-center font-cinzel text-[9px] text-parchment leading-tight px-0.5 line-clamp-1">
                           {charObj.name}
                         </p>
@@ -159,7 +159,7 @@ export default function BuildFormPage({
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                 />
-                <div className="grid grid-cols-5 sm:grid-cols-6 md:grid-cols-7 gap-2 max-h-[560px] overflow-y-auto pr-1 no-scrollbar">
+                <div className="grid grid-cols-5 sm:grid-cols-6 md:grid-cols-7 gap-2 max-h-140 overflow-y-auto pr-1 no-scrollbar">
                   {characters
                     .filter((char) =>
                       char.name.toLowerCase().includes(search.toLowerCase()),

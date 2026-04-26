@@ -73,7 +73,7 @@ export default function CharactersPage() {
         <h1 className="page-title">Characters</h1>
         <div className="flex flex-wrap gap-3">
           {/* Element dropdown */}
-          <div className="dropdown dropdown-end">
+          <div className="dropdown dropdown-bottom">
             <div
               tabIndex={0}
               role="button"
@@ -107,7 +107,7 @@ export default function CharactersPage() {
           </div>
 
           {/* Weapon dropdown */}
-          <div className="dropdown dropdown-end">
+          <div className="dropdown dropdown-bottom">
             <div
               tabIndex={0}
               role="button"
@@ -141,7 +141,7 @@ export default function CharactersPage() {
           </div>
 
           {/* Rarity dropdown */}
-          <div className="dropdown dropdown-end">
+          <div className="dropdown dropdown-bottom dropdown-end">
             <div
               tabIndex={0}
               role="button"
@@ -174,7 +174,8 @@ export default function CharactersPage() {
             </ul>
           </div>
 
-          <div className="dropdown dropdown-end">
+          {/* Nation dropdown */}
+          <div className="dropdown dropdown-bottom">
             <div
               tabIndex={0}
               role="button"
