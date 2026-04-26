@@ -100,7 +100,6 @@ export default function EditBuildPage() {
       loading={loading}
       search={search}
       setSearch={setSearch}
-      onBack={() => navigate("/builds")}
       title={"Edit Build"}
       submitLabel={"Save Changes"}
       submitLoading={submitLoading}

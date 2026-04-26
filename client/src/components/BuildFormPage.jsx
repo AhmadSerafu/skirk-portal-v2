@@ -1,4 +1,5 @@
 import { IoArrowBack } from "react-icons/io5";
+import { Link } from "react-router";
 
 const ELEMENT_COLORS = {
   Pyro: "border-red-500/60 shadow-red-500/20",
@@ -32,7 +33,6 @@ export default function BuildFormPage({
   loading,
   search,
   setSearch,
-  onBack,
   title = "New Build",
   submitLabel = "Create Build",
   submitLoading,
@@ -42,12 +42,12 @@ export default function BuildFormPage({
       <div className="max-w-5xl mx-auto flex flex-col gap-6">
         {/* Header */}
         <div className="flex flex-col gap-1 mb-2">
-          <button
-            onClick={onBack}
+          <Link
+            to="/builds"
             className="text-parchment-dim hover:text-gold transition-colors font-cinzel text-xs flex items-center gap-1 w-fit"
           >
             <IoArrowBack /> Back
-          </button>
+          </Link>
           <h1 className="page-title">{title}</h1>
           <p className="text-parchment-dim text-xs font-nunito">
             Select up to 4 characters to form your team
