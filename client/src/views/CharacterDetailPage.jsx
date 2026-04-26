@@ -58,7 +58,7 @@ export default function CharacterDetailPage() {
   const { id } = useParams();
   const [character, setCharacter] = useState({});
   const [loading, setLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState("skills");
+  const [activeTab, setActiveTab] = useState("stats");
 
   const [statsData, setStatsData] = useState(null);
   const [statsLoading, setStatsLoading] = useState(false);
