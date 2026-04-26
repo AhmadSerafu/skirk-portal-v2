@@ -26,6 +26,7 @@
 
 html {
   forced-color-adjust: none;
+  filter: none !important;
 }
 
 body {
