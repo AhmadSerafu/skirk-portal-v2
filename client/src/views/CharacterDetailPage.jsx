@@ -147,8 +147,8 @@ export default function CharacterDetailPage() {
         )}
 
         {/* Left-to-right + bottom gradients for readability */}
-        <div className="absolute inset-0 bg-gradient-to-r from-void-900/98 via-void-900/70 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-void-900 via-transparent to-void-900/50" />
+        <div className="absolute inset-0 bg-linear-to-r from-void-900/98 via-void-900/70 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-void-900 via-transparent to-void-900/50" />
 
         {/* Content */}
         <div className="relative z-10 h-full max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-end items-start md:items-end gap-8 pb-10 pt-8">
@@ -159,7 +159,12 @@ export default function CharacterDetailPage() {
               style={{ width: 180, height: 240 }}
             >
               <img
-                src={character.images?.icon || character.images?.card || ""}
+                src={
+                  character.images?.icon ||
+                  character.images?.card ||
+                  character.images?.portrait ||
+                  ""
+                }
                 alt={character.name}
                 className="w-full h-full object-cover object-top"
               />

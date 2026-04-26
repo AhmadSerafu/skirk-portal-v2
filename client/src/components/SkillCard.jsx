@@ -1,15 +1,19 @@
 import { useState } from "react";
 
 const formatValue = (template, parameters, level) => {
-  return template.replace(/\{(param\d+):(F1P|F2P|P|F1|I)\}/g, (_, key, fmt) => {
-    const raw = parameters[key]?.[level - 1] ?? 0;
-    if (fmt === "F1P") return (raw * 100).toFixed(1) + "%";
-    if (fmt === "F2P") return (raw * 100).toFixed(2) + "%";
-    if (fmt === "P") return Math.round(raw * 100) + "%";
-    if (fmt === "F1") return raw.toFixed(1);
-    if (fmt === "I") return Math.round(raw).toString();
-    return raw;
-  });
+  return template.replace(
+    /\{(param\d+):(F1P|F2P|P|F1|F2|I)\}/g,
+    (_, key, fmt) => {
+      const raw = parameters[key]?.[level - 1] ?? 0;
+      if (fmt === "F1P") return (raw * 100).toFixed(1) + "%";
+      if (fmt === "F2P") return (raw * 100).toFixed(2) + "%";
+      if (fmt === "P") return Math.round(raw * 100) + "%";
+      if (fmt === "F1") return raw.toFixed(1);
+      if (fmt === "F2") return raw.toFixed(2);
+      if (fmt === "I") return Math.round(raw).toString();
+      return raw;
+    },
+  );
 };
 
 export default function SkillCard({ skill }) {
