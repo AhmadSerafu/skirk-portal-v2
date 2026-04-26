@@ -4,6 +4,12 @@ const ENKA_BASE = "https://enka.network/ui";
 const enkaUrl = (filename) =>
   filename?.trim() ? `${ENKA_BASE}/${filename}.png` : null;
 
+const YATTA_BASE = "https://gi.yatta.moe/assets/UI";
+const yattaUrl = (filename) =>
+  filename?.trim() ? `${YATTA_BASE}/${filename}.png` : null;
+
+const stripHD = (filename) => filename?.replace("_HD", "") || null;
+
 class CharacterController {
   static getCharacters(req, res, next) {
     try {
@@ -69,6 +75,8 @@ class CharacterController {
         throw { name: "NotFound", message: "Character not found" };
 
       const talents = genshindb.talents(character.name);
+      const talentCosts = {};
+
       const constellations = genshindb.constellations(character.name);
 
       res.status(200).json({
@@ -85,13 +93,24 @@ class CharacterController {
         constellation: character.constellation,
         cv: character.cv,
         costs: character.costs || null,
+        talentCosts: talents?.costs || null,
         skillTalents: talents
-          ? [talents.combat1, talents.combat2, talents.combat3].filter(Boolean)
+          ? [talents.combat1, talents.combat2, talents.combat3]
+              .filter(Boolean)
+              .map((skill, i) => ({
+                ...skill,
+                icon: yattaUrl(
+                  stripHD(talents.images[`filename_combat${i + 1}`]),
+                ),
+              }))
           : [],
         passiveTalents: talents
-          ? [talents.passive1, talents.passive2, talents.passive3].filter(
-              Boolean,
-            )
+          ? [talents.passive1, talents.passive2, talents.passive3]
+              .filter(Boolean)
+              .map((passive, i) => ({
+                ...passive,
+                icon: yattaUrl(talents.images[`filename_passive${i + 1}`]),
+              }))
           : [],
         constellations: constellations
           ? [
@@ -101,7 +120,12 @@ class CharacterController {
               constellations.c4,
               constellations.c5,
               constellations.c6,
-            ].filter(Boolean)
+            ]
+              .filter(Boolean)
+              .map((cons, i) => ({
+                ...cons,
+                icon: yattaUrl(constellations.images[`filename_c${i + 1}`]),
+              }))
           : [],
         images: {
           icon:

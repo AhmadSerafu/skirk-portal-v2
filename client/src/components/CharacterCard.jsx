@@ -43,7 +43,7 @@ export default function CharacterCard({ character }) {
           />
 
           {/* Bottom gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-void-950 via-void-950/30 to-transparent pointer-events-none" />
+          <div className="absolute inset-0 bg-linear-to-t from-void-950 via-void-950/30 to-transparent pointer-events-none" />
 
           {/* Rarity stars — top left corner */}
           <div className="absolute top-1 left-1.5">

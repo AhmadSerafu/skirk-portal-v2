@@ -26,12 +26,25 @@ export default function SkillCard({ skill }) {
 
   return (
     <div className="card p-5">
-      <p className="font-cinzel text-sm font-semibold text-parchment mb-1">
-        {skill.name}
-      </p>
-      <p className="text-xs text-gold mb-2">{skill.unlock}</p>
+      {/* Header: icon + nama + unlock */}
+      <div className="flex items-center gap-3 mb-1">
+        {skill.icon && (
+          <img
+            src={skill.icon}
+            alt={skill.name}
+            className="w-10 h-10 object-contain shrink-0"
+          />
+        )}
+        <div>
+          <p className="font-cinzel text-sm font-semibold text-parchment">
+            {skill.name}
+          </p>
+          <p className="text-xs text-gold">{skill.unlock}</p>
+        </div>
+      </div>
 
-      <p className="text-parchment-dim text-sm leading-relaxed mb-4">
+      {/* Description */}
+      <p className="text-parchment-dim text-sm leading-relaxed mb-4 mt-3">
         {skill.description?.replace(/\*\*/g, "")}
       </p>
 

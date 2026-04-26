@@ -364,6 +364,7 @@ export default function CharacterDetailPage() {
             setStatLevel={setStatLevel}
             currentStats={currentStats}
             costs={character.costs}
+            talentCosts={character.talentCosts}
           />
         )}
       </div>
