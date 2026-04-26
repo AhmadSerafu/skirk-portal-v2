@@ -81,7 +81,7 @@ export default function StatsTab({
                 {statLevel}
               </span>
             </div>
-            <div className="flex items-center justify-between text-xs">
+            <div className="flex items-center gap-2 text-xs">
               <span className="text-parchment-dim">Ascension Phase</span>
               <span className="text-parchment font-semibold">
                 {currentStats?.ascension}
@@ -131,11 +131,13 @@ export default function StatsTab({
           </button>
 
           {/* Border separator — selalu ada */}
-          <div className="border-t border-void-600/50" />
+          <div className="border-t border-void-600/50 mt-2" />
 
           <div
-            className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 overflow-hidden transition-all duration-300 ${
-              showAscension ? "max-h-500 opacity-100" : "max-h-0 opacity-0"
+            className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 overflow-hidden transition-all duration-300 ${
+              showAscension
+                ? "max-h-500 opacity-100 pt-4 pb-4"
+                : "max-h-0 opacity-0"
             }`}
           >
             {ASCENSION_PHASES.map((phase) => {
@@ -194,11 +196,13 @@ export default function StatsTab({
           </button>
 
           {/* Border separator — selalu ada */}
-          <div className="border-t border-void-600/50" />
+          <div className="border-t border-void-600/50 mt-2" />
 
           <div
-            className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 overflow-hidden transition-all duration-300 ${
-              showTalent ? "max-h-500 opacity-100" : "max-h-0 opacity-0"
+            className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 overflow-hidden transition-all duration-300 ${
+              showTalent
+                ? "max-h-500 opacity-100 pt-4 pb-4"
+                : "max-h-0 opacity-0"
             }`}
           >
             {TALENT_LEVELS.map((lvl) => {
