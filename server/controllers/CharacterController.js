@@ -13,9 +13,6 @@ class CharacterController {
         matchCategories: true,
       });
 
-      const char = genshindb.characters("skirk");
-      console.log(char.costs);
-
       let characters = charNames
         .map((name) => {
           const character = genshindb.characters(name);
