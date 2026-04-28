@@ -4,10 +4,24 @@ import { Link } from "react-router";
 import CharacterCard from "../components/CharacterCard";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCharacters } from "../features/characters/charactersSlice";
-import { GiSwitchWeapon } from "react-icons/gi";
-import { GiFireball } from "react-icons/gi";
-import { GiStarFormation } from "react-icons/gi";
-import { GiEarthAsiaOceania } from "react-icons/gi";
+import { LuFilter } from "react-icons/lu";
+
+const elementColors = {
+  Pyro: "brightness(0) saturate(100%) invert(35%) sepia(100%) saturate(700%) hue-rotate(5deg)",
+  Hydro:
+    "brightness(0) saturate(100%) invert(55%) sepia(100%) saturate(700%) hue-rotate(185deg) brightness(1.3)",
+  Cryo: "brightness(0) saturate(100%) invert(70%) sepia(50%) saturate(300%) hue-rotate(175deg)",
+  Electro:
+    "brightness(0) saturate(100%) invert(25%) sepia(100%) saturate(800%) hue-rotate(265deg)",
+  Anemo:
+    "brightness(0) saturate(100%) invert(75%) sepia(50%) saturate(400%) hue-rotate(130deg)",
+  Geo: "brightness(0) saturate(100%) invert(80%) sepia(100%) saturate(600%) hue-rotate(5deg)",
+  Dendro:
+    "brightness(0) saturate(100%) invert(60%) sepia(100%) saturate(500%) hue-rotate(70deg)",
+};
+
+const weaponColor =
+  "brightness(0) saturate(100%) invert(80%) sepia(40%) saturate(400%) hue-rotate(10deg)";
 
 export default function CharactersPage() {
   const { data: characters, loading } = useSelector(
@@ -15,10 +29,11 @@ export default function CharactersPage() {
   );
   const dispatch = useDispatch();
 
+  const [search, setSearch] = useState("");
+  const [showFilter, setShowFilter] = useState(false);
   const [filterVision, setFilterVision] = useState("");
   const [filterWeapon, setFilterWeapon] = useState("");
   const [filterRarity, setFilterRarity] = useState("");
-  const [filterNation, setFilterNation] = useState("");
 
   const visions = [
     "Pyro",
@@ -31,15 +46,6 @@ export default function CharactersPage() {
   ];
   const weapons = ["Sword", "Claymore", "Polearm", "Bow", "Catalyst"];
   const rarities = [5, 4];
-  const nations = [
-    "Mondstadt",
-    "Liyue",
-    "Inazuma",
-    "Sumeru",
-    "Fontaine",
-    "Natlan",
-    "Snezhnaya",
-  ];
 
   const hiddenNames = new Set([
     "aloy",
@@ -55,10 +61,16 @@ export default function CharactersPage() {
         vision: filterVision,
         weapon: filterWeapon,
         rarity: filterRarity,
-        nation: filterNation,
       }),
     );
-  }, [filterVision, filterWeapon, filterRarity, filterNation]);
+  }, [filterVision, filterWeapon, filterRarity]);
+
+  const displayed = characters.filter(
+    (character) =>
+      !hiddenNames.has((character.name || "").trim().toLowerCase()) &&
+      (!search ||
+        (character.name || "").toLowerCase().includes(search.toLowerCase())),
+  );
 
   if (loading)
     return (
@@ -69,159 +81,139 @@ export default function CharactersPage() {
 
   return (
     <div className="pt-24 px-6 pb-12 max-w-6xl mx-auto overflow-hidden">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
+      <div className="flex items-center justify-between mb-8">
         <h1 className="page-title">Characters</h1>
-        <div className="flex flex-wrap gap-3">
-          {/* Element dropdown */}
-          <div className="dropdown dropdown-bottom">
-            <div
-              tabIndex={0}
-              role="button"
-              className="btn-outline px-3 py-1.5 w-fit flex items-center gap-2"
-            >
-              <GiFireball className="text-gold text-lg" />
-              <span className="font-cinzel text-xs tracking-widest uppercase">
-                {filterVision || "Element"}
-              </span>
-            </div>
-            <ul
-              tabIndex={0}
-              className="dropdown-content z-10 mt-1 bg-void-800 border border-void-600 rounded-lg overflow-hidden w-36"
-            >
-              <li
-                onClick={() => setFilterVision("")}
-                className="font-nunito text-sm text-parchment-dim px-4 py-2 hover:bg-void-600 cursor-pointer"
-              >
-                All Elements
-              </li>
-              {visions.map((vision, index) => (
-                <li
-                  key={index}
-                  onClick={() => setFilterVision(vision)}
-                  className="font-nunito text-sm text-parchment px-4 py-2 hover:bg-void-600 cursor-pointer"
+      </div>
+
+      {/* Backdrop */}
+      {showFilter && (
+        <div
+          className="fixed inset-0 z-10"
+          onClick={() => setShowFilter(false)}
+        />
+      )}
+
+      {/* Filter Bar */}
+      <div className="relative mb-6">
+        <div className="flex items-center gap-2 bg-void-800 border border-void-600 rounded-xl px-4 py-2">
+          <button
+            onClick={() => setShowFilter((prev) => !prev)}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors cursor-pointer
+              ${showFilter ? "text-gold bg-gold/10" : "text-parchment-dim hover:text-parchment hover:bg-void-600"}`}
+          >
+            <LuFilter className="w-4 h-4" />
+          </button>
+
+          <div className="w-px h-5 bg-void-600/80" />
+
+          <input
+            type="text"
+            placeholder="Search characters..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="flex-1 bg-transparent outline-none font-nunito text-sm text-parchment placeholder:text-parchment-dim/40"
+          />
+        </div>
+
+        {/* Filter Panel */}
+        <div
+          className={`absolute top-full mt-2 left-0 z-20 bg-void-800 border border-void-600 rounded-xl p-5 flex flex-col gap-5 w-[calc(100vw-4rem)] sm:w-[480px] transition-all duration-200 origin-top
+            ${showFilter ? "opacity-100 scale-y-100 pointer-events-auto" : "opacity-0 scale-y-95 pointer-events-none"}`}
+        >
+          {/* Elements */}
+          <div>
+            <p className="font-cinzel text-xs tracking-widest text-parchment-dim/60 mb-3">
+              ELEMENTS
+            </p>
+            <div className="grid grid-cols-7 gap-2">
+              {visions.map((el) => (
+                <button
+                  key={el}
+                  onClick={() => setFilterVision(filterVision === el ? "" : el)}
+                  title={el}
+                  className={`w-10 h-10 rounded-full border-2 p-1.5 transition-all
+                    ${filterVision === el ? "border-gold scale-110" : "border-transparent opacity-60 hover:opacity-90"}`}
                 >
-                  {vision}
-                </li>
+                  <img
+                    src={`https://api.lunaris.moe/data/assets/icons/${el.toLowerCase()}.webp`}
+                    alt={el}
+                    className="w-full h-full object-contain"
+                    style={{ filter: elementColors[el] }}
+                  />
+                </button>
               ))}
-            </ul>
+            </div>
           </div>
 
-          {/* Weapon dropdown */}
-          <div className="dropdown dropdown-bottom">
-            <div
-              tabIndex={0}
-              role="button"
-              className="btn-outline px-3 py-1.5 w-fit flex items-center gap-2"
-            >
-              <GiSwitchWeapon className="text-gold text-lg" />
-              <span className="font-cinzel text-xs tracking-widest uppercase">
-                {filterWeapon || "Weapon"}
-              </span>
-            </div>
-            <ul
-              tabIndex={0}
-              className="dropdown-content z-10 mt-1 bg-void-800 border border-void-600 rounded-lg overflow-hidden w-36"
-            >
-              <li
-                onClick={() => setFilterWeapon("")}
-                className="font-nunito text-sm text-parchment-dim px-4 py-2 hover:bg-void-600 cursor-pointer"
-              >
-                All Weapons
-              </li>
-              {weapons.map((weapon, index) => (
-                <li
-                  key={index}
-                  onClick={() => setFilterWeapon(weapon)}
-                  className="font-nunito text-sm text-parchment px-4 py-2 hover:bg-void-600 cursor-pointer"
+          {/* Weapon Type */}
+          <div>
+            <p className="font-cinzel text-xs tracking-widest text-parchment-dim/60 mb-3">
+              WEAPON TYPE
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {weapons.map((w) => (
+                <button
+                  key={w}
+                  onClick={() => setFilterWeapon(filterWeapon === w ? "" : w)}
+                  title={w}
+                  className={`w-10 h-10 rounded-full border-2 p-1.5 transition-all
+                    ${filterWeapon === w ? "border-gold scale-110" : "border-transparent opacity-50 hover:opacity-80"}`}
                 >
-                  {weapon}
-                </li>
+                  <img
+                    src={`https://api.lunaris.moe/data/assets/icons/${w.toLowerCase()}.webp`}
+                    alt={w}
+                    className="w-full h-full object-contain"
+                    style={{
+                      filter:
+                        filterWeapon === w ? elementColors.Geo : weaponColor,
+                    }}
+                  />
+                </button>
               ))}
-            </ul>
+            </div>
           </div>
 
-          {/* Rarity dropdown */}
-          <div className="dropdown dropdown-bottom dropdown-end">
-            <div
-              tabIndex={0}
-              role="button"
-              className="btn-outline px-3 py-1.5 w-fit flex items-center gap-2"
-            >
-              <GiStarFormation className="text-gold text-lg" />
-              <span className="font-cinzel text-xs tracking-widest uppercase">
-                {filterRarity ? `${filterRarity}★` : "Rarity"}
-              </span>
-            </div>
-            <ul
-              tabIndex={0}
-              className="dropdown-content z-10 mt-1 bg-void-800 border border-void-600 rounded-lg overflow-hidden w-36"
-            >
-              <li
-                onClick={() => setFilterRarity("")}
-                className="font-nunito text-sm text-parchment-dim px-4 py-2 hover:bg-void-600 cursor-pointer"
-              >
-                All Rarities
-              </li>
-              {rarities.map((rarity, index) => (
-                <li
-                  key={index}
-                  onClick={() => setFilterRarity(rarity)}
-                  className="font-nunito text-sm text-parchment px-4 py-2 hover:bg-void-600 cursor-pointer"
+          {/* Rarity */}
+          <div>
+            <p className="font-cinzel text-xs tracking-widest text-parchment-dim/60 mb-3">
+              RARITY
+            </p>
+            <div className="flex gap-2">
+              {rarities.map((r) => (
+                <button
+                  key={r}
+                  onClick={() => setFilterRarity(filterRarity === r ? "" : r)}
+                  className={`font-cinzel text-xs px-4 py-1.5 rounded-lg border transition-all
+                    ${filterRarity === r ? "border-gold text-gold bg-gold/10" : "border-void-600 text-parchment-dim hover:border-parchment-dim"}`}
                 >
-                  {rarity}★
-                </li>
+                  {r}★
+                </button>
               ))}
-            </ul>
-          </div>
-
-          {/* Nation dropdown */}
-          <div className="dropdown dropdown-bottom">
-            <div
-              tabIndex={0}
-              role="button"
-              className="btn-outline px-3 py-1.5 w-fit flex items-center gap-2"
-            >
-              <GiEarthAsiaOceania className="text-gold text-lg" />
-              <span className="font-cinzel text-xs tracking-widest uppercase">
-                {filterNation || "Nation"}
-              </span>
             </div>
-            <ul
-              tabIndex={0}
-              className="dropdown-content z-10 mt-1 bg-void-800 border border-void-600 rounded-lg overflow-hidden w-36"
-            >
-              <li
-                onClick={() => setFilterNation("")}
-                className="font-nunito text-sm text-parchment-dim px-4 py-2 hover:bg-void-600 cursor-pointer"
-              >
-                All Nations
-              </li>
-              {nations.map((nation, index) => (
-                <li
-                  key={index}
-                  onClick={() => setFilterNation(nation)}
-                  className="font-nunito text-sm text-parchment px-4 py-2 hover:bg-void-600 cursor-pointer"
-                >
-                  {nation}
-                </li>
-              ))}
-            </ul>
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-        {characters
-          .filter(
-            (character) =>
-              !hiddenNames.has((character.name || "").trim().toLowerCase()),
-          )
-          .map((character) => (
+
+      {/* Character Grid */}
+      {displayed.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-24 text-center">
+          <p className="font-cinzel text-2xl text-parchment-dim/40 mb-2">
+            No characters found
+          </p>
+          <p className="font-nunito text-sm text-parchment-dim/30">
+            Try a different name or filter
+          </p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+          {displayed.map((character) => (
             <CharacterCard
               key={character.id ?? character.name}
               character={character}
             />
           ))}
-      </div>
+        </div>
+      )}
     </div>
   );
 }
