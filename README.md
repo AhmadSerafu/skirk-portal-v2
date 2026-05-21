@@ -6,7 +6,7 @@
 
 ## 🔗 Links
 
-- **Client**: https://skirk-portal-v2.vercel.app/
+- **Client**: https://www.skirk.my.id
 - **Server**: https://skirk-portal-v2-api.up.railway.app/characters/skirk
 
 ---
@@ -20,6 +20,7 @@ Skirk Portal is a full-stack web application themed around Genshin Impact. It al
 ## ✨ Features
 
 - 🔍 **Character Explorer** — Browse all Genshin Impact characters with filter by element, weapon, nation, and rarity
+- 📊 **Character Detail** — View character stats, ascension materials, skill talents with scaling sliders, passives, constellations, and lore
 - 📋 **Team Builds** — Create, edit, and delete your own team compositions with up to 4 characters
 - 🤖 **AI Analyzer** — Analyze your team synergy using Gemini AI — get team name, rating, elemental reactions, strengths, weaknesses, and playstyle
 - 🔐 **Authentication** — Register, login, and Google OAuth support
@@ -53,55 +54,41 @@ Skirk Portal is a full-stack web application themed around Genshin Impact. It al
 
 ## 📸 Screenshots
 
-### Homepage
-
-![Homepage](docs/screenshots/homepage.png)
-
-### Characters
-
-![Characters](docs/screenshots/characters.png)
-
-### Character Detail
-
-![Character Detail](docs/screenshots/character-detail.png)
-
-### Login
-
-![Login](docs/screenshots/login.png)
-
-### Register
-
-![Register](docs/screenshots/register.png)
-
-### My Builds
-
-![My Builds](docs/screenshots/my-builds.png)
-
-### Create Build
-
-![Create Build](docs/screenshots/create-build.png)
-
-### Edit Build
-
-![Edit Build](docs/screenshots/edit-build.png)
-
-### AI Analyzer
-
-![AI Analyzer](docs/screenshots/ai-analyzer.png)
-
-### AI Analyzing
-
-![AI Analyzing](docs/screenshots/ai-analyzing.png)
-
-### AI Result
-
-![AI Result](docs/screenshots/ai-result.png)
+<table>
+  <tr>
+    <td align="center"><img src="docs/screenshots/homepage.png" width="400"/><br/><sub>Homepage</sub></td>
+    <td align="center"><img src="docs/screenshots/characters.png" width="400"/><br/><sub>Characters</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/screenshots/character-detail.png" width="400"/><br/><sub>Character Detail</sub></td>
+    <td align="center"><img src="docs/screenshots/login.png" width="400"/><br/><sub>Login</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/screenshots/register.png" width="400"/><br/><sub>Register</sub></td>
+    <td align="center"><img src="docs/screenshots/my-builds.png" width="400"/><br/><sub>My Builds</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/screenshots/create-build.png" width="400"/><br/><sub>Create Build</sub></td>
+    <td align="center"><img src="docs/screenshots/edit-build.png" width="400"/><br/><sub>Edit Build</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/screenshots/ai-analyzer.png" width="400"/><br/><sub>AI Analyzer</sub></td>
+    <td align="center"><img src="docs/screenshots/ai-analyzing.png" width="400"/><br/><sub>AI Analyzing</sub></td>
+  </tr>
+  <tr>
+    <td align="center" colspan="2"><img src="docs/screenshots/ai-result.png" width="400"/><br/><sub>AI Result</sub></td>
+  </tr>
+</table>
 
 ### Mobile View
 
-| Homepage                                                      | Characters                                                      | Login                                                      |
-| ------------------------------------------------------------- | --------------------------------------------------------------- | ---------------------------------------------------------- |
-| <img src="docs/screenshots/mobile-homepage.png" width="330"/> | <img src="docs/screenshots/mobile-characters.png" width="330"/> | <img src="docs/screenshots/mobile-login.png" width="330"/> |
+<table>
+  <tr>
+    <td align="center"><img src="docs/screenshots/mobile-homepage.png" width="250"/><br/><sub>Homepage</sub></td>
+    <td align="center"><img src="docs/screenshots/mobile-characters.png" width="250"/><br/><sub>Characters</sub></td>
+    <td align="center"><img src="docs/screenshots/mobile-login.png" width="250"/><br/><sub>Login</sub></td>
+  </tr>
+</table>
 
 ---
 
@@ -178,7 +165,7 @@ Coverage: **95%+** across statements, functions, and lines.
 ## 📁 Project Structure
 
 ```
-ip-AhmadSerafu-skirk-portal/
+skirk-portal-v2/
 ├── server/
 │   ├── __tests__/
 │   │   ├── auth.test.js
@@ -209,4 +196,4 @@ ip-AhmadSerafu-skirk-portal/
 
 ## 👤 Author
 
-**Ahmad Serafu** — Hacktiv8 Fullstack JavaScript Bootcamp, Phase 2 Individual Project
+**Ahmad Luthfi Hanif** — Hacktiv8 Fullstack JavaScript Bootcamp, Phase 2 Individual Project
